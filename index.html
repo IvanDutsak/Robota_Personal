@@ -431,6 +431,10 @@
                         <i class="fas fa-plus mr-3"></i>
                         Додати вручну
                     </button>
+                    <button id="clear-inputs-btn" class="w-full btn-primary btn-purple text-white font-bold py-4 px-6 rounded-xl text-lg relative overflow-hidden">
+                        <i class="fas fa-eraser mr-3"></i>
+                        Очистити дані
+                    </button>
                 </div>
             </div>
 
@@ -518,6 +522,10 @@
                     <div id="monthly-archives" class="space-y-3">
                         <!-- Monthly archives will be populated here -->
                     </div>
+                    <button id="delete-all-archives-btn" class="w-full mt-4 btn-primary btn-danger text-white font-bold py-3 px-4 rounded-xl text-lg relative overflow-hidden">
+                        <i class="fas fa-trash-alt mr-3"></i>
+                        Видалити всі архіви
+                    </button>
                 </div>
             </div>
         </div>
@@ -679,8 +687,10 @@
                     // Кнопки
                 this.saveBtn = document.getElementById('save-btn');
                 this.addManualBtn = document.getElementById('add-manual-btn');
+                this.clearInputsBtn = document.getElementById('clear-inputs-btn'); // Нова кнопка
                 this.autoRangeBtn = document.getElementById('auto-range-btn');
                 this.clearMonthBtn = document.getElementById('clear-month-btn');
+                this.deleteAllArchivesBtn = document.getElementById('delete-all-archives-btn'); // Нова кнопка
                 
                     // Поля дат
                 this.dateFrom = document.getElementById('date-from');
@@ -755,23 +765,14 @@
                         this.updateWorkTimeTotal();
                     });
                 });
-
-                // Обробники для полів часу в модальному вікні
-                const manualWorkTimeStart = document.getElementById('manual-work-time-start');
-                const manualWorkTimeEnd = document.getElementById('manual-work-time-end');
-
-                [manualWorkTimeStart, manualWorkTimeEnd].filter(input => input).forEach(input => {
-                    safeAddEventListener(input, 'change', () => {
-                        this.validateTimeInput(input);
-                        this.updateManualWorkTimeTotal();
-                    });
-                });
                 
                 // Додаємо обробники для основних кнопок
                 safeAddEventListener(this.saveBtn, 'click', () => this.saveData());
                 safeAddEventListener(this.addManualBtn, 'click', () => this.showManualModal());
+                safeAddEventListener(this.clearInputsBtn, 'click', () => this.clearInputFields()); // Обробник для нової кнопки
                 safeAddEventListener(this.autoRangeBtn, 'click', () => this.setAutoRange());
                 safeAddEventListener(this.clearMonthBtn, 'click', () => this.showClearModal());
+                safeAddEventListener(this.deleteAllArchivesBtn, 'click', () => this.confirmDeleteAllArchives()); // Обробник для нової кнопки
                 
                 // Додаємо обробник для кнопки збереження в архів
                 const saveToArchiveBtn = document.getElementById('save-to-archive-btn');
@@ -859,6 +860,17 @@
                 const goToArchiveBtn = document.getElementById('go-to-archive-btn');
                 safeAddEventListener(goToArchiveBtn, 'click', () => {
                     window.location.href = 'archive-list.html';
+                });
+
+                // Обробники для полів робочого часу в модальному вікні "Додати вручну"
+                const manualWorkTimeStart = document.getElementById('manual-work-time-start');
+                const manualWorkTimeEnd = document.getElementById('manual-work-time-end');
+
+                [manualWorkTimeStart, manualWorkTimeEnd].filter(input => input).forEach(input => {
+                    safeAddEventListener(input, 'change', () => {
+                        this.validateTimeInput(input); // Валідація введеного часу
+                        this.updateManualWorkTimeTotal(); // Оновлення загального часу
+                    });
                 });
             }
 
@@ -1137,79 +1149,108 @@
             }
 
             updateChart(data) {
-                const ctx = document.getElementById('statsChart').getContext('2d');
-                
-                if (this.chart) {
-                    this.chart.destroy();
-                }
-                
-                const sortedData = data.sort((a, b) => new Date(a.date) - new Date(b.date));
-                
-                this.chart = new Chart(ctx, {
-                    type: 'line',
-                    data: {
-                        labels: sortedData.map(item => {
-                            const date = new Date(item.date);
-                            return `${date.getDate()}/${date.getMonth() + 1}`;
-                        }),
-                        datasets: [{
-                            label: 'Загальний результат',
-                            data: sortedData.map(item => item.total),
-                            borderColor: '#10b981',
-                            backgroundColor: 'rgba(16, 185, 129, 0.1)',
-                            borderWidth: 3,
-                            fill: true,
-                            tension: 0.4,
-                            pointBackgroundColor: '#10b981',
-                            pointBorderColor: '#ffffff',
-                            pointBorderWidth: 2,
-                            pointRadius: 6,
-                            pointHoverRadius: 8
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        animation: {
-                            duration: 1000,
-                            easing: 'easeInOutQuart'
-                        },
-                        plugins: {
-                            legend: {
-                                labels: {
-                                    color: '#ffffff',
-                                    font: {
-                                        size: 14,
-                                        weight: 'bold'
-                                    }
-                                }
-                            }
-                        },
-                        scales: {
-                            x: {
-                                ticks: {
-                                    color: '#ffffff',
-                                    font: {
-                                        weight: 'bold'
-                                    }
-                                },
-                                grid: {
-                                    color: 'rgba(255, 255, 255, 0.1)'
-                                }
-                            },
-                            y: {
-                                ticks: {
-                                    color: '#ffffff',
-                                    font: {
-                                        weight: 'bold'
-                                    }
-                                },
-                                grid: {
-                                    color: 'rgba(255, 255, 255, 0.1)'
-                                }
-                            }
-                        }
+                try {
+                    const chartCanvas = document.getElementById('statsChart');
+                    if (!chartCanvas) {
+                        console.error("Елемент canvas з id='statsChart' не знайдено");
+                        return;
                     }
-                });
+
+                    // Агресивне очищення попереднього графіка
+                    if (this.chart) {
+                        this.chart.destroy();
+                        this.chart = null;
+                        // Спробуємо також очистити контекст canvas
+                        const ctx = chartCanvas.getContext('2d');
+                        ctx.clearRect(0, 0, chartCanvas.width, chartCanvas.height);
+                        console.log("Попередній графік знищено та canvas очищено.");
+                    }
+                    
+                    if (!data || data.length === 0) {
+                        console.log("Немає даних для відображення діаграми. Графік не буде створено.");
+                        // Додатково переконуємося, що canvas порожній, якщо дані відсутні
+                        const ctx = chartCanvas.getContext('2d');
+                        ctx.clearRect(0, 0, chartCanvas.width, chartCanvas.height);
+                        return;
+                    }
+                    
+                    const ctx = chartCanvas.getContext('2d');
+                    const sortedData = data.sort((a, b) => new Date(a.date) - new Date(b.date));
+                    
+                    // Невелика затримка перед створенням нового графіка, щоб дати браузеру час обробити знищення старого
+                    setTimeout(() => {
+                        this.chart = new Chart(ctx, {
+                            type: 'line',
+                            data: {
+                                labels: sortedData.map(item => {
+                                    const date = new Date(item.date);
+                                    return `${date.getDate()}/${date.getMonth() + 1}`;
+                                }),
+                                datasets: [{
+                                    label: 'Загальний результат',
+                                    data: sortedData.map(item => item.total),
+                                    borderColor: '#10b981',
+                                    backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                                    borderWidth: 3,
+                                    fill: true,
+                                    tension: 0.4,
+                                    pointBackgroundColor: '#10b981',
+                                    pointBorderColor: '#ffffff',
+                                    pointBorderWidth: 2,
+                                    pointRadius: 6,
+                                    pointHoverRadius: 8
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false, // Додано для кращої адаптивності
+                                animation: {
+                                    duration: 800, // Трохи зменшено для швидкості
+                                    easing: 'easeInOutCubic' // Змінено тип анімації
+                                },
+                                plugins: {
+                                    legend: {
+                                        labels: {
+                                            color: '#ffffff',
+                                            font: {
+                                                size: 14,
+                                                weight: 'bold'
+                                            }
+                                        }
+                                    }
+                                },
+                                scales: {
+                                    x: {
+                                        ticks: {
+                                            color: '#ffffff',
+                                            font: {
+                                                weight: 'bold'
+                                            }
+                                        },
+                                        grid: {
+                                            color: 'rgba(255, 255, 255, 0.1)'
+                                        }
+                                    },
+                                    y: {
+                                        ticks: {
+                                            color: '#ffffff',
+                                            font: {
+                                                weight: 'bold'
+                                            }
+                                        },
+                                        grid: {
+                                            color: 'rgba(255, 255, 255, 0.1)'
+                                        }
+                                    }
+                                }
+                            }
+                        });
+                        console.log("Новий графік створено з даними:", sortedData);
+                    }, 50); // Затримка 50 мс
+
+                } catch (error) {
+                    console.error("Помилка при оновленні/створенні діаграми:", error);
+                }
             }
 
             setAutoRange() {
@@ -1297,17 +1338,20 @@
                 
                 // Reset current inputs with animation
                 [this.dcCollectedInput, this.storeCollectedInput, this.dcMovedInput, this.placedInput].forEach(input => {
-                    input.style.transform = 'scale(0.9)';
-                    input.value = '';  // Встановлюємо порожній рядок замість 0
-                    setTimeout(() => {
-                        input.style.transform = '';
-                    }, 200);
+                    if (input) { // Додаємо перевірку на існування інпута
+                        input.style.transform = 'scale(0.9)';
+                        input.value = '';  // Встановлюємо порожній рядок замість 0
+                        setTimeout(() => {
+                            input.style.transform = '';
+                        }, 200);
+                    }
                 });
                 
                 this.hideClearModal();
-                this.updateCalculations();
-                this.updateStatistics();
-                this.loadMonthlyArchives();
+                this.updateCalculations(); // Оновлюємо розрахунки в полях вводу
+                this.updateStatistics();   // Оновлюємо статистику (дні, суми), це також викличе updateChart
+                this.loadMonthlyArchives(); // Перезавантажуємо список архівів
+                this.updateChart([]);       // ЯВНО очищаємо графік, передаючи порожній масив даних
                 
                 this.showSuccessAnimation();
             }
@@ -1321,30 +1365,36 @@
                         return;
                     }
                     
+                    // Очищаємо контейнер
+                    container.innerHTML = '';
+                    
                     // Отримуємо дані з localStorage
                     let monthlyArchives = {};
                     try {
                         const archivesData = localStorage.getItem('monthlyArchives');
+                        
                         if (archivesData) {
                             monthlyArchives = JSON.parse(archivesData);
+                        } else {
+                            container.innerHTML = '<div class="text-blue-300 text-center py-4 italic">Немає збережених архівів</div>';
+                            return;
                         }
                     } catch (error) {
                         console.error("Помилка при отриманні даних архіву:", error);
-                        monthlyArchives = {};
+                        container.innerHTML = '<div class="text-red-300 text-center py-4 italic">Помилка при завантаженні архівів</div>';
+                        return;
                     }
-                    
-                    // Очищаємо контейнер
-                    container.innerHTML = '';
                     
                     // Отримуємо поточний місяць
                     const currentMonth = new Date().toISOString().slice(0, 7);
                     
                     // Фільтруємо архіви, щоб показувати тільки поточний місяць
                     const currentMonthArchives = {};
+                    
                     Object.keys(monthlyArchives).forEach(key => {
                         // Перевіряємо, чи архів належить до поточного місяця
                         if (key.startsWith(currentMonth) || 
-                            (key.includes('-first') || key.includes('-second')) && key.startsWith(currentMonth.slice(0, 7))) {
+                            ((key.includes('-first') || key.includes('-second')) && key.startsWith(currentMonth.slice(0, 7)))) {
                             currentMonthArchives[key] = monthlyArchives[key];
                         }
                     });
@@ -1362,6 +1412,11 @@
                         try {
                             const archive = currentMonthArchives[archiveKey];
                             
+                            // Перевіряємо, чи є архів дійсним об'єктом
+                            if (!archive || typeof archive !== 'object') {
+                                return;
+                            }
+                            
                             const div = document.createElement('div');
                             div.className = 'archive-item bg-white bg-opacity-10 rounded-xl p-4 cursor-pointer transition-all duration-300 hover:bg-opacity-20';
                             div.style.animationDelay = `${index * 0.1}s`;
@@ -1369,7 +1424,7 @@
                             // Форматуємо великі числа для відображення в списку архівів
                             let formattedTotal = "0.00";
                             
-                            if (archive && typeof archive.total !== 'undefined') {
+                            if (typeof archive.total !== 'undefined') {
                                 if (Math.abs(archive.total) > 999999) {
                                     formattedTotal = archive.total.toExponential(2);
                                 } else {
@@ -1379,10 +1434,10 @@
                             
                             // Визначаємо заголовок архіву з урахуванням половини місяця
                             let archiveTitle = '';
-                            let periodText = archive && archive.period ? archive.period : '';
-                            let daysCount = archive && archive.daysCount ? archive.daysCount : '0';
+                            let periodText = archive.period || '';
+                            let daysCount = archive.daysCount || '0';
                             
-                            if (archive && archive.halfType && archive.monthName) {
+                            if (archive.halfType && archive.monthName) {
                                 // Новий формат з половиною місяця
                                 archiveTitle = `${archive.halfType} ${archive.monthName}`;
                             } else {
@@ -1418,6 +1473,7 @@
                             `;
                             
                             div.addEventListener('click', () => {
+                                // Тут потрібно модифікувати перехід на сторінку деталей, щоб враховувати нову структуру ключа
                                 // Використовуємо original_month, щоб зберегти сумісність зі старим форматом
                                 let original_month = archiveKey;
                                 if (archiveKey.includes('-first') || archiveKey.includes('-second')) {
@@ -1434,12 +1490,20 @@
                     });
                 } catch (error) {
                     console.error("Загальна помилка в loadMonthlyArchives():", error);
+                    const container = document.getElementById('monthly-archives');
+                    if (container) {
+                        container.innerHTML = '<div class="text-red-300 text-center py-4 italic">Сталася помилка при завантаженні архівів</div>';
+                    }
                 }
             }
 
             showMonthHalfSelector(currentMonthData, currentMonth, monthName) {
-                // Створюємо модальне вікно для вибору половини місяця
-                const modal = document.createElement('div');
+                const modalId = 'month-half-selector-modal'; // Унікальний ID
+                let modal = document.getElementById(modalId);
+                if (modal) modal.remove(); // Видаляємо попереднє модальне вікно, якщо існує
+
+                modal = document.createElement('div');
+                modal.id = modalId;
                 modal.className = 'fixed inset-0 modal-backdrop flex items-center justify-center p-4 z-50';
                 modal.innerHTML = `
                     <div class="glass-effect rounded-2xl p-8 w-full max-w-md modal-content">
@@ -1463,7 +1527,7 @@
                             
                             <button id="cancel-half-btn" class="w-full bg-gray-600 hover:bg-gray-700 text-white font-bold py-3 px-4 rounded-lg transition duration-200">
                                 Скасувати
-                            </button>
+                        </button>
                         </div>
                     </div>
                 `;
@@ -1488,23 +1552,29 @@
                 });
             }
 
-            // Метод для збереження архіву з вказаною половиною місяця
             saveArchiveWithHalf(currentMonthData, currentMonth, monthName, halfType) {
-                // Створюємо архів
-                const dates = Object.keys(currentMonthData).sort();
-                const firstDate = dates[0];
-                const lastDate = dates[dates.length - 1];
-                const total = Object.values(currentMonthData).reduce((sum, item) => sum + item.total, 0);
-                
-                // Зберігаємо в архів з додатковою інформацією про половину місяця
                 let monthlyArchives = JSON.parse(localStorage.getItem('monthlyArchives') || '{}');
-                
-                // Створюємо унікальний ключ для архіву, щоб розрізняти різні половини одного місяця
                 const archiveKey = `${currentMonth}-${halfType === 'Перша половина' ? 'first' : 'second'}`;
-                
+
+                if (monthlyArchives[archiveKey]) {
+                    // Архів вже існує, показуємо вікно підтвердження перезапису
+                    this.showOverwriteConfirmationModal(monthlyArchives[archiveKey], currentMonthData, archiveKey, monthName, halfType, currentMonth);
+                } else {
+                    // Архіву немає, просто зберігаємо
+                    this._performActualSave(currentMonthData, archiveKey, monthName, halfType, currentMonth);
+                }
+            }
+
+            _performActualSave(dataToSave, archiveKey, monthName, halfType, currentMonth) {
+                let monthlyArchives = JSON.parse(localStorage.getItem('monthlyArchives') || '{}');
+                const dates = Object.keys(dataToSave).sort();
+                const firstDate = dates.length > 0 ? dates[0] : currentMonth + '-01'; //Fallback if no data
+                const lastDate = dates.length > 0 ? dates[dates.length - 1] : currentMonth + '-28'; //Fallback
+                const total = Object.values(dataToSave).reduce((sum, item) => sum + (item.total || 0), 0);
+
                 monthlyArchives[archiveKey] = {
                     period: `${firstDate} - ${lastDate}`,
-                    data: currentMonthData,
+                    data: dataToSave,
                     total: total,
                     daysCount: dates.length,
                     monthName: monthName,
@@ -1512,12 +1582,131 @@
                 };
                 
                 localStorage.setItem('monthlyArchives', JSON.stringify(monthlyArchives));
-                
-                // Оновлюємо список архівів
                 this.loadMonthlyArchives();
-                
-                // Показуємо повідомлення про успіх
                 this.showSuccessMessage(`Дані успішно збережено в архів (${halfType} ${monthName})`);
+            }
+
+            showOverwriteConfirmationModal(existingArchiveData, newData, archiveKey, monthName, halfType, currentMonth) {
+                const modalId = 'overwrite-archive-confirmation-modal';
+                let modal = document.getElementById(modalId);
+                if (modal) modal.remove();
+
+                modal = document.createElement('div');
+                modal.id = modalId;
+                // Збільшено z-index, щоб перекривати інші модальні вікна, якщо вони раптом активні
+                modal.className = 'fixed inset-0 modal-backdrop flex items-center justify-center p-4 z-[60]'; 
+                
+                let diffHtml = '<div class="space-y-3 max-h-72 overflow-y-auto p-1 bg-gray-700 bg-opacity-20 rounded-lg">';
+                const existingDataEntries = existingArchiveData.data || {};
+                const newDataEntries = newData || {};
+                const allDates = [...new Set([...Object.keys(existingDataEntries), ...Object.keys(newDataEntries)])].sort();
+
+                let changesSummary = { added: 0, removed: 0, modified: 0 };
+
+                if (allDates.length === 0) {
+                    diffHtml += '<p class="text-center text-yellow-300 py-4">Немає даних для порівняння.</p>';
+                } else {
+                    allDates.forEach(date => {
+                        const oldEntry = existingDataEntries[date];
+                        const newEntry = newDataEntries[date];
+                        
+                        let entryCardHtml = `<div class="p-3 rounded-md shadow-md text-sm ">
+                                               <strong class="block text-base font-semibold mb-1.5 text-white">${date}</strong>`;
+
+                        if (oldEntry && !newEntry) {
+                            changesSummary.removed++;
+                            entryCardHtml += `<div class="border-l-4 border-red-500 pl-2 py-1 bg-red-500 bg-opacity-10">
+                                                <p class="text-red-300 font-medium"><i class="fas fa-trash-alt mr-1.5"></i>Запис буде видалено</p>
+                                                <p class="text-gray-300 text-xs">ДС: ${oldEntry.dcCollected || 0}, Маг: ${oldEntry.storeCollected || 0}, Пер: ${oldEntry.dcMoved || 0}, Роз: ${oldEntry.placed || 0} <span class="font-semibold">(Разом: ${oldEntry.total !== undefined ? oldEntry.total.toFixed(2) : 'N/A'})</span></p>
+                                              </div>`;
+                        } else if (!oldEntry && newEntry) {
+                            changesSummary.added++;
+                            entryCardHtml += `<div class="border-l-4 border-green-500 pl-2 py-1 bg-green-500 bg-opacity-10">
+                                                <p class="text-green-300 font-medium"><i class="fas fa-plus-circle mr-1.5"></i>Новий запис</p>
+                                                <p class="text-gray-300 text-xs">ДС: ${newEntry.dcCollected || 0}, Маг: ${newEntry.storeCollected || 0}, Пер: ${newEntry.dcMoved || 0}, Роз: ${newEntry.placed || 0} <span class="font-semibold">(Разом: ${newEntry.total !== undefined ? newEntry.total.toFixed(2) : 'N/A'})</span></p>
+                                              </div>`;
+                        } else if (oldEntry && newEntry) {
+                            const fields = [
+                                { key: 'dcCollected', name: 'Зібрано ДС' },
+                                { key: 'storeCollected', name: 'Зібрано Магазин' },
+                                { key: 'dcMoved', name: 'Переміщено ДС' },
+                                { key: 'placed', name: 'Розміщено' },
+                                { key: 'total', name: 'Загальний результат' }
+                            ];
+                            let fieldChangesHtml = '';
+                            let hasChangesThisEntry = false;
+
+                            fields.forEach(field => {
+                                const oldValue = oldEntry[field.key] !== undefined ? (field.key === 'total' ? parseFloat(oldEntry[field.key]).toFixed(2) : oldEntry[field.key]) : '0';
+                                const newValue = newEntry[field.key] !== undefined ? (field.key === 'total' ? parseFloat(newEntry[field.key]).toFixed(2) : newEntry[field.key]) : '0';
+                                
+                                if (String(oldValue) !== String(newValue)) {
+                                    hasChangesThisEntry = true;
+                                    fieldChangesHtml += `<p class="text-gray-300"><span class="font-medium text-gray-400">${field.name}:</span> <span class="text-red-400">${oldValue}</span> <i class="fas fa-arrow-right text-xs text-gray-500 mx-1"></i> <span class="text-green-400">${newValue}</span></p>`;
+                                } else {
+                                    // Можна відображати і незмінені поля, якщо потрібно
+                                    // fieldChangesHtml += `<p class="text-gray-400"><span class="font-medium">${field.name}:</span> ${newValue}</p>`;
+                                }
+                            });
+                            
+                            if (hasChangesThisEntry) {
+                                changesSummary.modified++;
+                                entryCardHtml += `<div class="border-l-4 border-yellow-500 pl-2 py-1 bg-yellow-500 bg-opacity-10">
+                                                    <p class="text-yellow-300 font-medium mb-1"><i class="fas fa-edit mr-1.5"></i>Змінено запис:</p>
+                                                    <div class="space-y-0.5 text-xs">${fieldChangesHtml}</div>
+                                                  </div>`;
+                            } else {
+                                // Якщо змін немає, можна або нічого не показувати для цієї дати, або показати як "без змін"
+                                 entryCardHtml += `<div class="border-l-4 border-gray-600 pl-2 py-1 bg-gray-500 bg-opacity-10">
+                                                    <p class="text-gray-400 font-medium"><i class="fas fa-check-circle mr-1.5"></i>Без змін</p>
+                                                 </div>`;
+                            }
+                        }
+                        entryCardHtml += '</div>'; // Кінець div для запису
+                        diffHtml += entryCardHtml;
+                    });
+                }
+                diffHtml += '</div>'; // Кінець контейнера для списку змін
+
+                let summaryText = '';
+                if (changesSummary.added > 0) summaryText += `<span class="text-green-300">Додано: ${changesSummary.added}</span>; `;
+                if (changesSummary.modified > 0) summaryText += `<span class="text-yellow-300">Змінено: ${changesSummary.modified}</span>; `;
+                if (changesSummary.removed > 0) summaryText += `<span class="text-red-300">Видалено: ${changesSummary.removed}</span>; `;
+                if (summaryText === '') summaryText = 'Змін не виявлено.';
+                 else summaryText = summaryText.slice(0, -2); // remove last semicolon and space
+
+
+                modal.innerHTML = `
+                    <div class="glass-effect rounded-xl p-5 sm:p-7 w-full max-w-xl modal-content shadow-2xl">
+                        <h3 class="text-xl sm:text-2xl font-bold text-white mb-3 sm:mb-4 flex items-center">
+                            <i class="fas fa-exclamation-triangle mr-2 sm:mr-3 text-yellow-400"></i>
+                            Підтвердження перезапису архіву
+                        </h3>
+                        <p class="text-blue-200 mb-2 text-sm sm:text-base">Архів для <strong class="text-white font-semibold">${halfType} ${monthName}</strong> вже існує.</p>
+                        <p class="text-blue-200 mb-3 sm:mb-4 text-sm sm:text-base">Загалом змін: ${summaryText}</p>
+                        <p class="text-blue-100 mb-2 text-xs font-medium">Деталі змін:</p>
+                        ${diffHtml} 
+                        <p class="text-blue-200 mt-4 sm:mt-5 text-sm sm:text-base">Ви дійсно хочете замінити існуючі дані новими?</p>
+                        <div class="mt-5 sm:mt-6 grid grid-cols-2 gap-3 sm:gap-4">
+                            <button id="cancel-overwrite-btn" class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2.5 px-4 rounded-lg transition duration-200 text-xs sm:text-sm">
+                                <i class="fas fa-times mr-1.5"></i>Скасувати
+                            </button>
+                            <button id="confirm-overwrite-btn" class="btn-primary btn-danger text-white font-bold py-2.5 px-4 rounded-lg relative overflow-hidden text-xs sm:text-sm">
+                                <i class="fas fa-save mr-1.5"></i>Замінити
+                            </button>
+                        </div>
+                    </div>
+                `;
+                document.body.appendChild(modal);
+
+                document.getElementById('cancel-overwrite-btn').addEventListener('click', () => {
+                    modal.remove();
+                });
+
+                document.getElementById('confirm-overwrite-btn').addEventListener('click', () => {
+                    modal.remove();
+                    this._performActualSave(newData, archiveKey, monthName, halfType, currentMonth);
+                });
             }
 
             // Додаємо метод для показу повідомлення про успіх (може вже існувати)
@@ -1560,7 +1749,12 @@
                 const monthName = monthNames[parseInt(monthNum) - 1];
                 
                 // Створюємо модальне вікно підтвердження
-                const modal = document.createElement('div');
+                const modalId = 'archive-confirmation-modal'; // Унікальний ID
+                let modal = document.getElementById(modalId);
+                if (modal) modal.remove(); // Видаляємо попереднє модальне вікно, якщо існує
+
+                modal = document.createElement('div');
+                modal.id = modalId;
                 modal.className = 'fixed inset-0 modal-backdrop flex items-center justify-center p-4 z-50';
                 modal.innerHTML = `
                     <div class="glass-effect rounded-2xl p-8 w-full max-w-md modal-content">
@@ -1595,58 +1789,6 @@
                     
                     // Показуємо діалогове вікно для вибору половини місяця
                     this.showMonthHalfSelector(currentMonthData, currentMonth, monthName);
-                });
-            }
-
-            // Метод для вибору половини місяця
-            showMonthHalfSelector(currentMonthData, currentMonth, monthName) {
-                // Створюємо модальне вікно для вибору половини місяця
-                const modal = document.createElement('div');
-                modal.className = 'fixed inset-0 modal-backdrop flex items-center justify-center p-4 z-50';
-                modal.innerHTML = `
-                    <div class="glass-effect rounded-2xl p-8 w-full max-w-md modal-content">
-                        <h3 class="text-2xl font-bold text-white mb-4 flex items-center">
-                            <i class="fas fa-calendar-alt mr-3 text-blue-400"></i>
-                            Яка це половина місяця?
-                        </h3>
-                        
-                        <p class="text-blue-200 mb-6 text-lg">Оберіть, до якої половини місяця відносяться дані:</p>
-                        
-                        <div class="space-y-4">
-                            <button id="first-half-btn" class="w-full btn-primary bg-green-600 hover:bg-green-700 text-white font-bold py-4 px-6 rounded-xl text-lg relative overflow-hidden">
-                                <i class="fas fa-calendar-day mr-3"></i>
-                                Перша половина ${monthName}
-                            </button>
-                            
-                            <button id="second-half-btn" class="w-full btn-primary bg-purple-600 hover:bg-purple-700 text-white font-bold py-4 px-6 rounded-xl text-lg relative overflow-hidden">
-                                <i class="fas fa-calendar-week mr-3"></i>
-                                Друга половина ${monthName}
-                            </button>
-                            
-                            <button id="cancel-half-btn" class="w-full bg-gray-600 hover:bg-gray-700 text-white font-bold py-3 px-4 rounded-lg transition duration-200">
-                                Скасувати
-                            </button>
-                        </div>
-                    </div>
-                `;
-                
-                document.body.appendChild(modal);
-                
-                // Обробник для кнопки "Скасувати"
-                document.getElementById('cancel-half-btn').addEventListener('click', () => {
-                    modal.remove();
-                });
-                
-                // Обробник для кнопки "Перша половина"
-                document.getElementById('first-half-btn').addEventListener('click', () => {
-                    this.saveArchiveWithHalf(currentMonthData, currentMonth, monthName, 'Перша половина');
-                    modal.remove();
-                });
-                
-                // Обробник для кнопки "Друга половина"
-                document.getElementById('second-half-btn').addEventListener('click', () => {
-                    this.saveArchiveWithHalf(currentMonthData, currentMonth, monthName, 'Друга половина');
-                    modal.remove();
                 });
             }
 
@@ -1735,74 +1877,125 @@
                 // Встановлюємо валідоване значення
                 input.value = `${formattedHours}:${formattedMinutes}`;
             }
+
+            // Метод для підтвердження видалення всіх архівів
+            confirmDeleteAllArchives() {
+                const modalId = 'delete-all-archives-confirmation-modal';
+                let modal = document.getElementById(modalId);
+                if (modal) modal.remove();
+
+                modal = document.createElement('div');
+                modal.id = modalId;
+                modal.className = 'fixed inset-0 modal-backdrop flex items-center justify-center p-4 z-50';
+                modal.innerHTML = `
+                    <div class="glass-effect rounded-2xl p-8 w-full max-w-md modal-content">
+                        <h3 class="text-2xl font-bold text-white mb-4 flex items-center">
+                            <i class="fas fa-exclamation-triangle mr-3 text-red-400"></i>
+                            Видалити всі архіви?
+                        </h3>
+                        <p class="text-blue-200 mb-8 text-lg">Ви дійсно хочете видалити ВСІ збережені архіви? Ця дія незворотна.</p>
+                        <div class="grid grid-cols-2 gap-4">
+                            <button id="cancel-delete-all-btn" class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-3 px-4 rounded-lg transition duration-200">
+                                Скасувати
+                            </button>
+                            <button id="confirm-delete-all-btn" class="btn-primary btn-danger text-white font-bold py-3 px-4 rounded-lg relative overflow-hidden">
+                                <i class="fas fa-trash-alt mr-2"></i>
+                                Видалити всі
+                            </button>
+                        </div>
+                    </div>
+                `;
+                document.body.appendChild(modal);
+
+                document.getElementById('cancel-delete-all-btn').addEventListener('click', () => {
+                    modal.remove();
+                });
+
+                document.getElementById('confirm-delete-all-btn').addEventListener('click', () => {
+                    modal.remove();
+                    this.deleteAllArchives();
+                });
+            }
+
+            // Метод для видалення всіх архівів
+            deleteAllArchives() {
+                localStorage.removeItem('monthlyArchives');
+                this.loadMonthlyArchives(); // Оновлюємо список архівів на сторінці
+                this.showSuccessMessage('Всі архіви успішно видалено!');
+            }
+
+            // Метод для очищення полів вводу
+            clearInputFields() {
+                const inputsToClear = [
+                    this.dcCollectedInput,
+                    this.storeCollectedInput,
+                    this.dcMovedInput,
+                    this.placedInput,
+                    document.getElementById('work-time-start'),
+                    document.getElementById('work-time-end')
+                ];
+
+                inputsToClear.forEach(input => {
+                    if (input) {
+                        input.value = ''; // Очищаємо значення
+                        // Плавна анімація очищення
+                        if (input.classList.contains('input-glow')) {
+                            input.style.transform = 'scale(0.95)';
+                            input.style.opacity = '0.7';
+                            setTimeout(() => {
+                                input.style.transform = '';
+                                input.style.opacity = '';
+                            }, 200);
+                        }
+                    }
+                });
+
+                // Оновлюємо розрахунки та загальний час роботи
+                this.updateCalculations();
+                this.updateWorkTimeTotal();
+                // this.updateChart([]); // Прибираємо очищення графіка звідси
+                
+                // Фокусуємося на першому полі для зручності
+                if (this.dcCollectedInput) {
+                    this.dcCollectedInput.focus();
+                }
+
+                // Можна додати повідомлення про успішне очищення, якщо потрібно
+                // this.showSuccessMessage('Поля вводу очищено!'); 
+            }
         }
 
         // Initialize the application
         document.addEventListener('DOMContentLoaded', function() {
-            console.log("DOMContentLoaded: Початок ініціалізації");
-            
-            // Додаємо стилі
-            const style = document.createElement('style');
-            style.textContent = `
-                @keyframes slideInRight {
-                    from { transform: translateX(100%); opacity: 0; }
-                    to { transform: translateX(0); opacity: 1; }
+            try {
+                // Перевіряємо наявність Chart.js
+                if (typeof Chart === 'undefined') {
+                    console.error("Chart.js не завантажено! Програма може працювати некоректно.");
                 }
                 
-                @keyframes slideOutRight {
-                    from { transform: translateX(0); opacity: 1; }
-                    to { transform: translateX(100%); opacity: 0; }
+                // Створюємо екземпляр WarehouseStats із захватом помилок
+                try {
+                    window.warehouseStatsInstance = new WarehouseStats();
+                    console.log("Програму успішно ініціалізовано");
+                } catch (error) {
+                    console.error("Помилка при створенні WarehouseStats:", error);
+                    
+                    // Повідомлення для користувача
+                    const errorMessage = document.createElement('div');
+                    errorMessage.className = 'fixed top-0 left-0 right-0 bg-red-600 text-white p-4 text-center';
+                    errorMessage.innerHTML = 'Виникла помилка при запуску програми. Будь ласка, оновіть сторінку.';
+                    document.body.appendChild(errorMessage);
                 }
-            `;
-            document.head.appendChild(style);
-            
-            // Створюємо екземпляр WarehouseStats
-            window.warehouseStatsInstance = new WarehouseStats();
-            console.log("DOMContentLoaded: Екземпляр WarehouseStats створено");
-            
-            // Додаємо обробник події для полів часу в модальному вікні
-            const manualWorkTimeStart = document.getElementById('manual-work-time-start');
-            const manualWorkTimeEnd = document.getElementById('manual-work-time-end');
-            
-            if (manualWorkTimeStart && manualWorkTimeEnd) {
-                [manualWorkTimeStart, manualWorkTimeEnd].forEach(input => {
-                    input.addEventListener('change', () => {
-                        // Оновлюємо відображення загального часу роботи в модальному вікні
-                        const startValue = manualWorkTimeStart.value;
-                        const endValue = manualWorkTimeEnd.value;
-                        const workTimeTotal = document.getElementById('manual-work-time-total');
-                        
-                        if (startValue && endValue && workTimeTotal) {
-                            const startParts = startValue.split(':');
-                            const endParts = endValue.split(':');
-                            
-                            const startDate = new Date();
-                            startDate.setHours(parseInt(startParts[0]), parseInt(startParts[1]), 0);
-                            
-                            const endDate = new Date();
-                            endDate.setHours(parseInt(endParts[0]), parseInt(endParts[1]), 0);
-                            
-                            // Якщо кінцевий час менший за початковий, додаємо 1 день
-                            if (endDate < startDate) {
-                                endDate.setDate(endDate.getDate() + 1);
-                            }
-                            
-                            const diffMinutes = Math.floor((endDate - startDate) / (1000 * 60));
-                            const hours = Math.floor(diffMinutes / 60);
-                            const minutes = diffMinutes % 60;
-                            
-                            workTimeTotal.textContent = `${hours} год ${minutes} хв`;
-                        }
-                    });
-                });
+                
+                // Додаємо обробник для favicon.ico
+                const head = document.querySelector('head');
+                const favicon = document.createElement('link');
+                favicon.rel = 'icon';
+                favicon.href = 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">📊</text></svg>';
+                head.appendChild(favicon);
+            } catch (error) {
+                console.error("Критична помилка при ініціалізації:", error);
             }
-            
-            // Додаємо серію перевірок для гарантованого завантаження архівів (спрощена версія)
-            setTimeout(() => {
-                if (window.warehouseStatsInstance) {
-                    window.warehouseStatsInstance.loadMonthlyArchives();
-                }
-            }, 300);
         });
     </script>
 </body>
