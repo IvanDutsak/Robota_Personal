@@ -41,7 +41,7 @@
             -webkit-appearance: none;
             -moz-appearance: none;
             padding-right: 2.5rem;
-            min-width: 200px;
+            width: 100%;
         }
         
         select option {
@@ -203,109 +203,109 @@
     </style>
 </head>
 <body class="min-h-screen">
-    <div class="container mx-auto px-4 py-8">
+    <div class="container mx-auto px-2 sm:px-4 py-4 sm:py-8">
         <!-- Header -->
-        <div class="text-center mb-8 fade-in">
-            <h1 class="text-5xl font-bold text-white mb-3 header-glow">
-                <i class="fas fa-archive mr-3 icon-rotate"></i>
+        <div class="text-center mb-6 sm:mb-8 fade-in">
+            <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-2 sm:mb-3 header-glow">
+                <i class="fas fa-archive mr-2 sm:mr-3 icon-rotate"></i>
                 Архів: <span id="archive-title">Місяць/Рік</span>
             </h1>
-            <p class="text-blue-200 text-lg">Детальна статистика за кожен день</p>
+            <p class="text-blue-200 text-sm sm:text-base md:text-lg">Детальна статистика за кожен день</p>
             
-            <div class="mt-4 flex justify-center space-x-4">
-                <button id="back-btn" class="btn-primary text-white font-bold py-2 px-6 rounded-xl text-lg relative overflow-hidden">
-                    <i class="fas fa-arrow-left mr-2"></i>
+            <div class="mt-4 flex flex-col sm:flex-row justify-center space-y-2 sm:space-y-0 sm:space-x-3">
+                <button id="back-btn" class="btn-primary text-white font-bold py-2.5 sm:py-3 px-4 sm:px-6 rounded-lg sm:rounded-xl text-base sm:text-lg relative overflow-hidden w-full sm:w-auto">
+                    <i class="fas fa-arrow-left mr-1.5 sm:mr-2"></i>
                     Повернутись на головну
                 </button>
                 
-                <button id="export-csv-btn" class="btn-primary bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-6 rounded-xl text-lg relative overflow-hidden">
-                    <i class="fas fa-file-pdf mr-2"></i>
+                <button id="export-csv-btn" class="btn-primary bg-green-600 hover:bg-green-700 text-white font-bold py-2.5 sm:py-3 px-4 sm:px-6 rounded-lg sm:rounded-xl text-base sm:text-lg relative overflow-hidden w-full sm:w-auto">
+                    <i class="fas fa-file-pdf mr-1.5 sm:mr-2"></i>
                     Експорт у PDF
                 </button>
             </div>
         </div>
 
         <!-- Main Content -->
-        <div class="grid lg:grid-cols-2 gap-8">
+        <div class="grid lg:grid-cols-2 gap-4 sm:gap-6 md:gap-8">
             <!-- Summary Section -->
-            <div class="glass-effect rounded-2xl p-8 fade-in">
-                <h2 class="text-3xl font-bold text-white mb-6">
-                    <i class="fas fa-chart-pie mr-3 text-blue-400"></i>
+            <div class="glass-effect rounded-xl sm:rounded-2xl p-4 sm:p-6 md:p-8 fade-in">
+                <h2 class="text-xl sm:text-2xl md:text-3xl font-bold text-white mb-4 sm:mb-6">
+                    <i class="fas fa-chart-pie mr-2 sm:mr-3 text-blue-400"></i>
                     Загальна статистика
                 </h2>
                 
-                <div class="space-y-4 mb-8">
-                    <div class="stat-card rounded-lg p-4">
-                        <div class="flex justify-between items-center">
-                            <span class="text-blue-200 font-medium">Період:</span>
-                            <span id="archive-period" class="text-white font-bold text-xl">01.01.2023 - 31.01.2023</span>
+                <div class="space-y-3 sm:space-y-4 mb-6 sm:mb-8">
+                    <div class="stat-card rounded-md sm:rounded-lg p-3 sm:p-4">
+                        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center">
+                            <span class="text-blue-200 font-medium text-sm sm:text-base mb-1 sm:mb-0">Період:</span>
+                            <span id="archive-period" class="text-white font-bold text-base sm:text-lg md:text-xl text-right">01.01.2023 - 31.01.2023</span>
                         </div>
                     </div>
                     
-                    <div class="stat-card rounded-lg p-4">
+                    <div class="stat-card rounded-md sm:rounded-lg p-3 sm:p-4">
                         <div class="flex justify-between items-center">
-                            <span class="text-blue-200 font-medium">Кількість днів:</span>
-                            <span id="archive-days-count" class="text-white font-bold text-xl">31</span>
+                            <span class="text-blue-200 font-medium text-sm sm:text-base">Кількість днів:</span>
+                            <span id="archive-days-count" class="text-white font-bold text-lg sm:text-xl">31</span>
                         </div>
                     </div>
                     
-                    <div class="total-result rounded-xl p-6 relative overflow-hidden">
-                        <div class="flex items-center justify-between relative z-10">
-                            <div class="flex items-center">
-                                <i class="fas fa-trophy text-white text-2xl mr-3"></i>
-                                <span class="text-white font-bold text-2xl">Загальний результат:</span>
+                    <div class="total-result rounded-xl p-4 sm:p-5 md:p-6 relative overflow-hidden">
+                        <div class="flex flex-col sm:flex-row items-center justify-between relative z-10">
+                            <div class="flex items-center mb-2 sm:mb-0">
+                                <i class="fas fa-trophy text-white text-xl sm:text-2xl mr-2 sm:mr-3"></i>
+                                <span class="text-white font-bold text-base sm:text-lg md:text-2xl">Загальний результат:</span>
                             </div>
-                            <span id="archive-total" class="text-white font-bold text-3xl">0.00</span>
+                            <span id="archive-total" class="text-white font-bold text-2xl sm:text-3xl">0.00</span>
                         </div>
                     </div>
                 </div>
                 
                 <!-- Chart -->
-                <div class="chart-container mb-8">
-                    <canvas id="archiveChart" width="400" height="250"></canvas>
+                <div class="chart-container mb-6 sm:mb-8 p-2 sm:p-3 md:p-4">
+                    <canvas id="archiveChart"></canvas>
                 </div>
                 
                 <!-- Summary By Category -->
                 <div>
-                    <h3 class="text-xl font-bold text-white mb-4 flex items-center">
-                        <i class="fas fa-list-alt mr-2 text-green-400"></i>
+                    <h3 class="text-lg sm:text-xl font-bold text-white mb-3 sm:mb-4 flex items-center">
+                        <i class="fas fa-list-alt mr-1.5 sm:mr-2 text-green-400"></i>
                         За категоріями
                     </h3>
                     
-                    <div class="space-y-3">
-                        <div class="stat-card rounded-lg p-4">
+                    <div class="space-y-2 sm:space-y-3">
+                        <div class="stat-card rounded-md sm:rounded-lg p-3 sm:p-4">
                             <div class="flex justify-between items-center">
-                                <span class="text-blue-200 font-medium">Зібрано у ДС:</span>
-                                <span id="summary-dc-collected" class="text-white font-bold text-xl">0</span>
+                                <span class="text-blue-200 font-medium text-sm sm:text-base">Зібрано у ДС:</span>
+                                <span id="summary-dc-collected" class="text-white font-bold text-base sm:text-lg md:text-xl">0</span>
                             </div>
                         </div>
                         
-                        <div class="stat-card rounded-lg p-4">
+                        <div class="stat-card rounded-md sm:rounded-lg p-3 sm:p-4">
                             <div class="flex justify-between items-center">
-                                <span class="text-blue-200 font-medium">Зібрано у магазині:</span>
-                                <span id="summary-store-collected" class="text-white font-bold text-xl">0</span>
+                                <span class="text-blue-200 font-medium text-sm sm:text-base">Зібрано у магазині:</span>
+                                <span id="summary-store-collected" class="text-white font-bold text-base sm:text-lg md:text-xl">0</span>
                             </div>
                         </div>
                         
-                        <div class="stat-card rounded-lg p-4">
+                        <div class="stat-card rounded-md sm:rounded-lg p-3 sm:p-4">
                             <div class="flex justify-between items-center">
-                                <span class="text-blue-200 font-medium">Переміщено у ДС:</span>
-                                <span id="summary-dc-moved" class="text-white font-bold text-xl">0</span>
+                                <span class="text-blue-200 font-medium text-sm sm:text-base">Переміщено у ДС:</span>
+                                <span id="summary-dc-moved" class="text-white font-bold text-base sm:text-lg md:text-xl">0</span>
                             </div>
                         </div>
                         
-                        <div class="stat-card rounded-lg p-4">
+                        <div class="stat-card rounded-md sm:rounded-lg p-3 sm:p-4">
                             <div class="flex justify-between items-center">
-                                <span class="text-blue-200 font-medium">Розміщено:</span>
-                                <span id="summary-placed" class="text-white font-bold text-xl">0</span>
+                                <span class="text-blue-200 font-medium text-sm sm:text-base">Розміщено:</span>
+                                <span id="summary-placed" class="text-white font-bold text-base sm:text-lg md:text-xl">0</span>
                             </div>
                         </div>
                         
                         <!-- Додаємо сумарний робочий час -->
-                        <div class="stat-card rounded-lg p-4">
+                        <div class="stat-card rounded-md sm:rounded-lg p-3 sm:p-4">
                             <div class="flex justify-between items-center">
-                                <span class="text-blue-200 font-medium">Загальний робочий час:</span>
-                                <span id="summary-work-time" class="text-white font-bold text-xl">0 год 0 хв</span>
+                                <span class="text-blue-200 font-medium text-sm sm:text-base">Загальний робочий час:</span>
+                                <span id="summary-work-time" class="text-white font-bold text-base sm:text-lg md:text-xl">0 год 0 хв</span>
                             </div>
                         </div>
                     </div>
@@ -313,21 +313,21 @@
             </div>
 
             <!-- Daily Data Section -->
-            <div class="glass-effect rounded-2xl p-8 fade-in">
-                <h2 class="text-3xl font-bold text-white mb-6">
-                    <i class="fas fa-calendar-day mr-3 text-purple-400"></i>
+            <div class="glass-effect rounded-xl sm:rounded-2xl p-4 sm:p-6 md:p-8 fade-in">
+                <h2 class="text-xl sm:text-2xl md:text-3xl font-bold text-white mb-4 sm:mb-6">
+                    <i class="fas fa-calendar-day mr-2 sm:mr-3 text-purple-400"></i>
                     Щоденна статистика
                 </h2>
                 
                 <!-- Search and Sort -->
-                <div class="mb-6 space-y-4">
+                <div class="mb-4 sm:mb-6 space-y-3 sm:space-y-4">
                     <!-- Пошук за текстом -->
-                    <div class="flex space-x-4">
+                    <div class="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-3">
                         <div class="flex-1">
-                            <input type="text" id="search-day" placeholder="Пошук за датою..." class="w-full rounded-lg px-4 py-3 bg-white bg-opacity-10 text-white border border-blue-500 focus:border-blue-400 focus:ring focus:ring-blue-400 focus:ring-opacity-50">
+                            <input type="text" id="search-day" placeholder="Пошук за датою..." class="w-full rounded-md sm:rounded-lg px-3 py-2 sm:px-4 sm:py-3 bg-white bg-opacity-10 text-white border border-blue-500 focus:border-blue-400 focus:ring focus:ring-blue-400 focus:ring-opacity-50 text-sm sm:text-base">
                         </div>
-                        <div>
-                            <select id="sort-days" class="rounded-lg px-4 py-3 text-white border border-purple-500 focus:border-purple-400 focus:ring focus:ring-purple-400 focus:ring-opacity-50">
+                        <div class="w-full sm:w-auto">
+                            <select id="sort-days" class="w-full rounded-md sm:rounded-lg px-3 py-2.5 sm:px-4 sm:py-3.5 text-white border border-purple-500 focus:border-purple-400 focus:ring focus:ring-purple-400 focus:ring-opacity-50 text-sm sm:text-base">
                                 <option value="date-desc">Дата (нові спочатку)</option>
                                 <option value="date-asc">Дата (старі спочатку)</option>
                                 <option value="total-desc">Результат (високий спочатку)</option>
@@ -337,32 +337,32 @@
                     </div>
                     
                     <!-- Пошук за діапазоном дат -->
-                    <div class="glass-effect rounded-xl p-4">
-                        <h3 class="text-white font-bold mb-3 flex items-center">
-                            <i class="fas fa-calendar-alt mr-2 text-blue-400"></i>
+                    <div class="glass-effect rounded-lg sm:rounded-xl p-3 sm:p-4">
+                        <h3 class="text-white font-medium sm:font-bold mb-2 sm:mb-3 flex items-center text-sm sm:text-base">
+                            <i class="fas fa-calendar-alt mr-1.5 sm:mr-2 text-blue-400"></i>
                             Фільтр за діапазоном дат
                         </h3>
-                        <div class="grid grid-cols-2 gap-4 mb-3">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 mb-2 sm:mb-3">
                             <div>
-                                <label class="block text-blue-200 text-sm font-medium mb-2">З дати:</label>
-                                <input type="date" id="date-from" class="w-full rounded-lg px-4 py-2 bg-white bg-opacity-10 text-white border border-blue-500 focus:border-blue-400 focus:ring focus:ring-blue-400 focus:ring-opacity-50">
+                                <label class="block text-blue-200 text-xs sm:text-sm font-medium mb-1 sm:mb-2">З дати:</label>
+                                <input type="date" id="date-from" class="w-full rounded-md sm:rounded-lg px-3 py-2 bg-white bg-opacity-10 text-white border border-blue-500 focus:border-blue-400 focus:ring focus:ring-blue-400 focus:ring-opacity-50 text-sm sm:text-base">
                             </div>
                             <div>
-                                <label class="block text-blue-200 text-sm font-medium mb-2">По дату:</label>
-                                <input type="date" id="date-to" class="w-full rounded-lg px-4 py-2 bg-white bg-opacity-10 text-white border border-blue-500 focus:border-blue-400 focus:ring focus:ring-blue-400 focus:ring-opacity-50">
+                                <label class="block text-blue-200 text-xs sm:text-sm font-medium mb-1 sm:mb-2">По дату:</label>
+                                <input type="date" id="date-to" class="w-full rounded-md sm:rounded-lg px-3 py-2 bg-white bg-opacity-10 text-white border border-blue-500 focus:border-blue-400 focus:ring focus:ring-blue-400 focus:ring-opacity-50 text-sm sm:text-base">
                             </div>
                         </div>
-                        <div class="flex space-x-2">
-                            <button id="apply-filter-btn" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition duration-200">
-                                <i class="fas fa-filter mr-2"></i>
+                        <div class="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2">
+                            <button id="apply-filter-btn" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 sm:py-2.5 px-3 sm:px-4 rounded-md text-xs sm:text-sm transition duration-200">
+                                <i class="fas fa-filter mr-1 sm:mr-2"></i>
                                 Показати
                             </button>
-                            <button id="reset-filter-btn" class="flex-1 bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded transition duration-200">
-                                <i class="fas fa-sync mr-2"></i>
+                            <button id="reset-filter-btn" class="flex-1 bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 sm:py-2.5 px-3 sm:px-4 rounded-md text-xs sm:text-sm transition duration-200">
+                                <i class="fas fa-sync mr-1 sm:mr-2"></i>
                                 Скинути
                             </button>
-                            <button id="show-total-btn" class="flex-1 bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded transition duration-200">
-                                <i class="fas fa-calculator mr-2"></i>
+                            <button id="show-total-btn" class="flex-1 bg-green-600 hover:bg-green-700 text-white font-bold py-2 sm:py-2.5 px-3 sm:px-4 rounded-md text-xs sm:text-sm transition duration-200">
+                                <i class="fas fa-calculator mr-1 sm:mr-2"></i>
                                 Підсумок
                             </button>
                         </div>
@@ -370,7 +370,7 @@
                 </div>
                 
                 <!-- Days List -->
-                <div id="days-container" class="space-y-4 overflow-y-auto max-h-[800px] pr-2">
+                <div id="days-container" class="space-y-3 sm:space-y-4 overflow-y-auto max-h-[600px] sm:max-h-[700px] md:max-h-[800px] pr-1 sm:pr-2">
                     <!-- День буде згенеровано через JavaScript -->
                 </div>
             </div>
@@ -569,7 +569,7 @@
             
             createDayElement(date, dayData) {
                 const dayCard = document.createElement('div');
-                dayCard.className = 'day-card stat-card rounded-xl p-5';
+                dayCard.className = 'day-card stat-card rounded-lg sm:rounded-xl p-3 sm:p-4 md:p-5';
                 dayCard.dataset.date = date;
                 dayCard.dataset.total = dayData.total;
                 
@@ -595,59 +595,59 @@
                     const minutes = Math.floor((dayData.workTimeTotal || 0) % 60);
                     
                     workTimeHtml = `
-                        <div class="mt-3 bg-white bg-opacity-5 rounded-lg p-3">
-                            <div class="text-blue-200 text-sm">Робочий час:</div>
-                            <div class="flex justify-between items-center mt-1">
-                                <span class="text-white text-sm">${dayData.workTimeStart} - ${dayData.workTimeEnd}</span>
-                                <span class="text-blue-300 font-medium">${hours} год ${minutes} хв</span>
+                        <div class="mt-2 sm:mt-3 bg-white bg-opacity-5 rounded-md sm:rounded-lg p-2 sm:p-3">
+                            <div class="text-blue-200 text-xs sm:text-sm">Робочий час:</div>
+                            <div class="flex flex-col xs:flex-row justify-between items-start xs:items-center mt-1">
+                                <span class="text-white text-xs sm:text-sm mb-0.5 xs:mb-0">${dayData.workTimeStart} - ${dayData.workTimeEnd}</span>
+                                <span class="text-blue-300 font-medium text-xs sm:text-sm">${hours} год ${minutes} хв</span>
                             </div>
                         </div>
                     `;
                 }
                 
                 dayCard.innerHTML = `
-                    <div class="mb-4 flex justify-between items-center">
-                        <div class="flex items-center">
-                            <div class="bg-blue-600 p-2 rounded-full mr-3">
-                                <i class="fas fa-calendar-day text-white"></i>
+                    <div class="mb-3 sm:mb-4 flex flex-col sm:flex-row justify-between items-start sm:items-center">
+                        <div class="flex items-center mb-2 sm:mb-0">
+                            <div class="bg-blue-600 p-1.5 sm:p-2 rounded-full mr-2 sm:mr-3">
+                                <i class="fas fa-calendar-day text-white text-xs sm:text-base"></i>
                             </div>
-                            <span class="text-white font-bold text-lg">${formattedDate}</span>
+                            <span class="text-white font-semibold sm:font-bold text-base sm:text-lg">${formattedDate}</span>
                         </div>
-                        <span class="text-green-400 font-bold text-xl number-truncate" style="max-width: 120px;">
+                        <span class="text-green-400 font-semibold sm:font-bold text-lg sm:text-xl number-truncate self-end sm:self-center" style="max-width: 100px; sm:max-width: 120px;">
                             ${formattedTotal}
                         </span>
                     </div>
                     
-                    <div class="grid grid-cols-2 gap-3">
-                        <div class="bg-white bg-opacity-10 rounded-lg p-3">
-                            <div class="text-blue-200 text-sm">Зібрано у ДС</div>
-                            <div class="flex justify-between items-center mt-1">
-                                <span class="text-white font-medium">${dayData.dcCollected || 0}</span>
-                                <span class="text-blue-300 text-sm">× 1.55</span>
+                    <div class="grid grid-cols-1 xs:grid-cols-2 gap-2 sm:gap-3">
+                        <div class="bg-white bg-opacity-10 rounded-md sm:rounded-lg p-2 sm:p-3">
+                            <div class="text-blue-200 text-xs sm:text-sm">Зібрано у ДС</div>
+                            <div class="flex justify-between items-center mt-0.5 sm:mt-1">
+                                <span class="text-white font-medium text-sm sm:text-base">${dayData.dcCollected || 0}</span>
+                                <span class="text-blue-300 text-xs sm:text-sm">× 1.55</span>
                             </div>
                         </div>
                         
-                        <div class="bg-white bg-opacity-10 rounded-lg p-3">
-                            <div class="text-blue-200 text-sm">Зібрано у магазині</div>
-                            <div class="flex justify-between items-center mt-1">
-                                <span class="text-white font-medium">${dayData.storeCollected || 0}</span>
-                                <span class="text-blue-300 text-sm">× 3.55</span>
+                        <div class="bg-white bg-opacity-10 rounded-md sm:rounded-lg p-2 sm:p-3">
+                            <div class="text-blue-200 text-xs sm:text-sm">Зібрано у магазині</div>
+                            <div class="flex justify-between items-center mt-0.5 sm:mt-1">
+                                <span class="text-white font-medium text-sm sm:text-base">${dayData.storeCollected || 0}</span>
+                                <span class="text-blue-300 text-xs sm:text-sm">× 3.55</span>
                             </div>
                         </div>
                         
-                        <div class="bg-white bg-opacity-10 rounded-lg p-3">
-                            <div class="text-blue-200 text-sm">Переміщено у ДС</div>
-                            <div class="flex justify-between items-center mt-1">
-                                <span class="text-white font-medium">${dayData.dcMoved || 0}</span>
-                                <span class="text-blue-300 text-sm">× 4.55</span>
+                        <div class="bg-white bg-opacity-10 rounded-md sm:rounded-lg p-2 sm:p-3">
+                            <div class="text-blue-200 text-xs sm:text-sm">Переміщено у ДС</div>
+                            <div class="flex justify-between items-center mt-0.5 sm:mt-1">
+                                <span class="text-white font-medium text-sm sm:text-base">${dayData.dcMoved || 0}</span>
+                                <span class="text-blue-300 text-xs sm:text-sm">× 4.55</span>
                             </div>
                         </div>
                         
-                        <div class="bg-white bg-opacity-10 rounded-lg p-3">
-                            <div class="text-blue-200 text-sm">Розміщено</div>
-                            <div class="flex justify-between items-center mt-1">
-                                <span class="text-white font-medium">${dayData.placed || 0}</span>
-                                <span class="text-blue-300 text-sm">× 1.77</span>
+                        <div class="bg-white bg-opacity-10 rounded-md sm:rounded-lg p-2 sm:p-3">
+                            <div class="text-blue-200 text-xs sm:text-sm">Розміщено</div>
+                            <div class="flex justify-between items-center mt-0.5 sm:mt-1">
+                                <span class="text-white font-medium text-sm sm:text-base">${dayData.placed || 0}</span>
+                                <span class="text-blue-300 text-xs sm:text-sm">× 1.77</span>
                             </div>
                         </div>
                     </div>
