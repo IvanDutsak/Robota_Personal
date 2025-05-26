@@ -755,6 +755,17 @@
                         this.updateWorkTimeTotal();
                     });
                 });
+
+                // Обробники для полів часу в модальному вікні
+                const manualWorkTimeStart = document.getElementById('manual-work-time-start');
+                const manualWorkTimeEnd = document.getElementById('manual-work-time-end');
+
+                [manualWorkTimeStart, manualWorkTimeEnd].filter(input => input).forEach(input => {
+                    safeAddEventListener(input, 'change', () => {
+                        this.validateTimeInput(input);
+                        this.updateManualWorkTimeTotal();
+                    });
+                });
                 
                 // Додаємо обробники для основних кнопок
                 safeAddEventListener(this.saveBtn, 'click', () => this.saveData());
@@ -1302,11 +1313,9 @@
             }
 
             loadMonthlyArchives() {
-                console.log("Викликано loadMonthlyArchives()");
-                
                 try {
                     // Перевіряємо, чи існує елемент контейнера
-                const container = document.getElementById('monthly-archives');
+                    const container = document.getElementById('monthly-archives');
                     if (!container) {
                         console.error("Елемент з id='monthly-archives' не знайдено!");
                         return;
@@ -1316,8 +1325,6 @@
                     let monthlyArchives = {};
                     try {
                         const archivesData = localStorage.getItem('monthlyArchives');
-                        console.log("Дані архіву з localStorage:", archivesData);
-                        
                         if (archivesData) {
                             monthlyArchives = JSON.parse(archivesData);
                         }
@@ -1327,11 +1334,10 @@
                     }
                     
                     // Очищаємо контейнер
-                container.innerHTML = '';
-                
+                    container.innerHTML = '';
+                    
                     // Отримуємо поточний місяць
                     const currentMonth = new Date().toISOString().slice(0, 7);
-                    console.log("Поточний місяць:", currentMonth);
                     
                     // Фільтруємо архіви, щоб показувати тільки поточний місяць
                     const currentMonthArchives = {};
@@ -1345,22 +1351,20 @@
                     
                     // Перевіряємо, чи є архіви поточного місяця
                     const archiveKeys = Object.keys(currentMonthArchives);
-                    console.log("Знайдено архівів поточного місяця:", archiveKeys.length);
                     
                     if (archiveKeys.length === 0) {
                         container.innerHTML = '<div class="text-blue-300 text-center py-4 italic">Немає збережених архівів за поточний місяць</div>';
-                    return;
-                }
-                
+                        return;
+                    }
+                    
                     // Відображаємо архіви поточного місяця
                     archiveKeys.sort().reverse().forEach((archiveKey, index) => {
                         try {
                             const archive = currentMonthArchives[archiveKey];
-                            console.log(`Обробка архіву [${index}]:`, archiveKey, archive);
                             
-                    const div = document.createElement('div');
-                    div.className = 'archive-item bg-white bg-opacity-10 rounded-xl p-4 cursor-pointer transition-all duration-300 hover:bg-opacity-20';
-                    div.style.animationDelay = `${index * 0.1}s`;
+                            const div = document.createElement('div');
+                            div.className = 'archive-item bg-white bg-opacity-10 rounded-xl p-4 cursor-pointer transition-all duration-300 hover:bg-opacity-20';
+                            div.style.animationDelay = `${index * 0.1}s`;
                             
                             // Форматуємо великі числа для відображення в списку архівів
                             let formattedTotal = "0.00";
@@ -1397,24 +1401,23 @@
                                 }
                             }
                             
-                    div.innerHTML = `
-                        <div class="flex justify-between items-center">
-                            <div>
-                                <div class="text-white font-bold text-lg flex items-center">
-                                    <i class="fas fa-calendar-check mr-2 text-blue-400"></i>
+                            div.innerHTML = `
+                                <div class="flex justify-between items-center">
+                                    <div>
+                                        <div class="text-white font-bold text-lg flex items-center">
+                                            <i class="fas fa-calendar-check mr-2 text-blue-400"></i>
                                             ${archiveTitle}
-                                </div>
+                                        </div>
                                         <div class="text-blue-300 text-sm mt-1">${periodText}</div>
-                            </div>
-                            <div class="text-right">
+                                    </div>
+                                    <div class="text-right">
                                         <div class="text-green-400 font-bold text-xl">${formattedTotal}</div>
                                         <div class="text-blue-300 text-sm">${daysCount} днів</div>
-                            </div>
-                        </div>
-                    `;
-                    
+                                    </div>
+                                </div>
+                            `;
+                            
                             div.addEventListener('click', () => {
-                                // Тут потрібно модифікувати перехід на сторінку деталей, щоб враховувати нову структуру ключа
                                 // Використовуємо original_month, щоб зберегти сумісність зі старим форматом
                                 let original_month = archiveKey;
                                 if (archiveKey.includes('-first') || archiveKey.includes('-second')) {
@@ -1424,7 +1427,7 @@
                                 window.location.href = `archive-detail.html?month=${original_month}&archive_key=${archiveKey}`;
                             });
                             
-                    container.appendChild(div);
+                            container.appendChild(div);
                         } catch (error) {
                             console.error(`Помилка при відображенні архіву ${archiveKey}:`, error);
                         }
@@ -1595,7 +1598,7 @@
                 });
             }
 
-            // Новий метод для вибору половини місяця
+            // Метод для вибору половини місяця
             showMonthHalfSelector(currentMonthData, currentMonth, monthName) {
                 // Створюємо модальне вікно для вибору половини місяця
                 const modal = document.createElement('div');
@@ -1622,7 +1625,7 @@
                             
                             <button id="cancel-half-btn" class="w-full bg-gray-600 hover:bg-gray-700 text-white font-bold py-3 px-4 rounded-lg transition duration-200">
                                 Скасувати
-                        </button>
+                            </button>
                         </div>
                     </div>
                 `;
@@ -1644,112 +1647,6 @@
                 document.getElementById('second-half-btn').addEventListener('click', () => {
                     this.saveArchiveWithHalf(currentMonthData, currentMonth, monthName, 'Друга половина');
                     modal.remove();
-                });
-            }
-
-            // Метод для збереження архіву з вказаною половиною місяця
-            saveArchiveWithHalf(currentMonthData, currentMonth, monthName, halfType) {
-                // Створюємо архів
-                const dates = Object.keys(currentMonthData).sort();
-                const firstDate = dates[0];
-                const lastDate = dates[dates.length - 1];
-                const total = Object.values(currentMonthData).reduce((sum, item) => sum + item.total, 0);
-                
-                // Зберігаємо в архів з додатковою інформацією про половину місяця
-                let monthlyArchives = JSON.parse(localStorage.getItem('monthlyArchives') || '{}');
-                
-                // Створюємо унікальний ключ для архіву, щоб розрізняти різні половини одного місяця
-                const archiveKey = `${currentMonth}-${halfType === 'Перша половина' ? 'first' : 'second'}`;
-                
-                monthlyArchives[archiveKey] = {
-                    period: `${firstDate} - ${lastDate}`,
-                    data: currentMonthData,
-                    total: total,
-                    daysCount: dates.length,
-                    monthName: monthName,
-                    halfType: halfType
-                };
-                
-                localStorage.setItem('monthlyArchives', JSON.stringify(monthlyArchives));
-                
-                // Оновлюємо список архівів
-                this.loadMonthlyArchives();
-                
-                // Показуємо повідомлення про успіх
-                this.showSuccessMessage(`Дані успішно збережено в архів (${halfType} ${monthName})`);
-            }
-
-            // Відновлюємо метод loadMonthlyArchives для відображення інформації про половину місяця
-            loadMonthlyArchives() {
-                const monthlyArchives = JSON.parse(localStorage.getItem('monthlyArchives') || '{}');
-                const container = document.getElementById('monthly-archives');
-                
-                container.innerHTML = '';
-                
-                if (Object.keys(monthlyArchives).length === 0) {
-                    container.innerHTML = '<div class="text-blue-300 text-center py-4 italic">Немає збережених архівів</div>';
-                    return;
-                }
-                
-                Object.keys(monthlyArchives).sort().reverse().forEach((archiveKey, index) => {
-                    const archive = monthlyArchives[archiveKey];
-                    const div = document.createElement('div');
-                    div.className = 'archive-item bg-white bg-opacity-10 rounded-xl p-4 cursor-pointer transition-all duration-300 hover:bg-opacity-20';
-                    div.style.animationDelay = `${index * 0.1}s`;
-                    
-                    // Форматуємо великі числа для відображення в списку архівів
-                    let formattedTotal = archive.total;
-                    if (Math.abs(archive.total) > 999999) {
-                        formattedTotal = archive.total.toExponential(2);
-                    } else {
-                        formattedTotal = archive.total.toFixed(2);
-                    }
-                    
-                    // Визначаємо заголовок архіву з урахуванням половини місяця
-                    let archiveTitle = '';
-                    
-                    if (archive.halfType && archive.monthName) {
-                        // Новий формат з половиною місяця
-                        archiveTitle = `${archive.halfType} ${archive.monthName}`;
-                    } else {
-                        // Старий формат для сумісності зі старими архівами
-                        const [year, month] = archiveKey.split('-');
-                        if (year && month) {
-                            const monthNames = ['Січень', 'Лютий', 'Березень', 'Квітень', 'Травень', 'Червень', 'Липень', 'Серпень', 'Вересень', 'Жовтень', 'Листопад', 'Грудень'];
-                            archiveTitle = `${monthNames[parseInt(month) - 1]} ${year}`;
-                        } else {
-                            archiveTitle = archiveKey;
-                        }
-                    }
-                    
-                    div.innerHTML = `
-                        <div class="flex justify-between items-center">
-                            <div>
-                                <div class="text-white font-bold text-lg flex items-center">
-                                    <i class="fas fa-calendar-check mr-2 text-blue-400"></i>
-                                    ${archiveTitle}
-                                </div>
-                                <div class="text-blue-300 text-sm mt-1">${archive.period}</div>
-                            </div>
-                            <div class="text-right">
-                                <div class="text-green-400 font-bold text-xl">${formattedTotal}</div>
-                                <div class="text-blue-300 text-sm">${archive.daysCount} днів</div>
-                            </div>
-                        </div>
-                    `;
-                    
-                    div.addEventListener('click', () => {
-                        // Тут потрібно модифікувати перехід на сторінку деталей, щоб враховувати нову структуру ключа
-                        // Використовуємо original_month, щоб зберегти сумісність зі старим форматом
-                        let original_month = archiveKey;
-                        if (archiveKey.includes('-first') || archiveKey.includes('-second')) {
-                            original_month = archiveKey.split('-').slice(0, 2).join('-');
-                        }
-                        
-                        window.location.href = `archive-detail.html?month=${original_month}&archive_key=${archiveKey}`;
-                    });
-                    
-                    container.appendChild(div);
                 });
             }
 
@@ -1863,147 +1760,49 @@
             window.warehouseStatsInstance = new WarehouseStats();
             console.log("DOMContentLoaded: Екземпляр WarehouseStats створено");
             
-            // Додаємо серію перевірок для гарантованого завантаження архівів
-            const checkAndLoadArchives = function() {
-                console.log("Спроба завантаження архівів...");
+            // Додаємо обробник події для полів часу в модальному вікні
+            const manualWorkTimeStart = document.getElementById('manual-work-time-start');
+            const manualWorkTimeEnd = document.getElementById('manual-work-time-end');
+            
+            if (manualWorkTimeStart && manualWorkTimeEnd) {
+                [manualWorkTimeStart, manualWorkTimeEnd].forEach(input => {
+                    input.addEventListener('change', () => {
+                        // Оновлюємо відображення загального часу роботи в модальному вікні
+                        const startValue = manualWorkTimeStart.value;
+                        const endValue = manualWorkTimeEnd.value;
+                        const workTimeTotal = document.getElementById('manual-work-time-total');
+                        
+                        if (startValue && endValue && workTimeTotal) {
+                            const startParts = startValue.split(':');
+                            const endParts = endValue.split(':');
+                            
+                            const startDate = new Date();
+                            startDate.setHours(parseInt(startParts[0]), parseInt(startParts[1]), 0);
+                            
+                            const endDate = new Date();
+                            endDate.setHours(parseInt(endParts[0]), parseInt(endParts[1]), 0);
+                            
+                            // Якщо кінцевий час менший за початковий, додаємо 1 день
+                            if (endDate < startDate) {
+                                endDate.setDate(endDate.getDate() + 1);
+                            }
+                            
+                            const diffMinutes = Math.floor((endDate - startDate) / (1000 * 60));
+                            const hours = Math.floor(diffMinutes / 60);
+                            const minutes = diffMinutes % 60;
+                            
+                            workTimeTotal.textContent = `${hours} год ${minutes} хв`;
+                        }
+                    });
+                });
+            }
+            
+            // Додаємо серію перевірок для гарантованого завантаження архівів (спрощена версія)
+            setTimeout(() => {
                 if (window.warehouseStatsInstance) {
                     window.warehouseStatsInstance.loadMonthlyArchives();
-                    
-                    // Перевіряємо, чи архіви видимі, якщо ні - додаємо примусове перезавантаження
-                    const archivesContainer = document.getElementById('monthly-archives');
-                    if (archivesContainer && (!archivesContainer.children.length || archivesContainer.children.length === 1 && archivesContainer.children[0].classList.contains('text-blue-300'))) {
-                        // Імітуємо подію, яка запускає відображення архівів
-                        console.log("Архіви не видимі, застосовуємо примусове оновлення");
-                        
-                        // Тимчасово зберігаємо поточні дані
-                        const currentData = localStorage.getItem('warehouseData');
-                        const currentArchives = localStorage.getItem('monthlyArchives');
-                        
-                        // Повністю перезавантажуємо об'єкт WarehouseStats
-                        window.warehouseStatsInstance = new WarehouseStats();
-                        
-                        // Явно викликаємо метод loadMonthlyArchives з невеликою затримкою
-                        setTimeout(() => {
-                            window.warehouseStatsInstance.loadMonthlyArchives();
-                        }, 50);
-                    }
                 }
-            };
-            
-            // Завантажуємо архіви кілька разів з різними затримками
-            setTimeout(checkAndLoadArchives, 100);
-            setTimeout(checkAndLoadArchives, 500);
-            setTimeout(checkAndLoadArchives, 1000);
-            
-            // Додаємо слухача для завантаження всіх ресурсів
-            window.addEventListener('load', function() {
-                console.log("Window.load: всі ресурси завантажено");
-                setTimeout(checkAndLoadArchives, 200);
-                
-                // Додаємо спеціальну перевірку після повного завантаження
-                setTimeout(() => {
-                    const archivesContainer = document.getElementById('monthly-archives');
-                    if (archivesContainer) {
-                        // Отримуємо архіви напряму і перевіряємо їх кількість
-                        try {
-                            const archives = JSON.parse(localStorage.getItem('monthlyArchives') || '{}');
-                            const archiveCount = Object.keys(archives).length;
-                            console.log(`В localStorage знайдено ${archiveCount} архівів`);
-                            
-                            // Якщо є архіви, але вони не відображаються - виконуємо примусове оновлення DOM
-                            if (archiveCount > 0 && (!archivesContainer.children.length || 
-                                (archivesContainer.children.length === 1 && archivesContainer.children[0].classList.contains('text-blue-300')))) {
-                                console.log("Знайдено архіви, але вони не відображаються. Застосовуємо примусове відображення");
-                                
-                                // Очищаємо контейнер
-                                archivesContainer.innerHTML = '';
-                                
-                                // Додаємо кожен архів вручну
-                                Object.keys(archives).sort().reverse().forEach((archiveKey, index) => {
-                                    try {
-                                        const archive = archives[archiveKey];
-                                        console.log(`Ручне додавання архіву [${index}]:`, archiveKey);
-                                        
-                                        const div = document.createElement('div');
-                                        div.className = 'archive-item bg-white bg-opacity-10 rounded-xl p-4 cursor-pointer transition-all duration-300 hover:bg-opacity-20';
-                                        
-                                        // Визначаємо заголовок архіву
-                                        let archiveTitle = '';
-                                        if (archive.halfType && archive.monthName) {
-                                            archiveTitle = `${archive.halfType} ${archive.monthName}`;
-                                        } else {
-                                            const [year, month] = archiveKey.split('-');
-                                            if (year && month) {
-                                                const monthNames = ['Січень', 'Лютий', 'Березень', 'Квітень', 'Травень', 'Червень', 'Липень', 'Серпень', 'Вересень', 'Жовтень', 'Листопад', 'Грудень'];
-                                                const monthIndex = parseInt(month) - 1;
-                                                if (monthIndex >= 0 && monthIndex < 12) {
-                                                    archiveTitle = `${monthNames[monthIndex]} ${year}`;
-                                                } else {
-                                                    archiveTitle = archiveKey;
-                                                }
-                                            } else {
-                                                archiveTitle = archiveKey;
-                                            }
-                                        }
-                                        
-                                        // Форматуємо числа
-                                        let formattedTotal = "0.00";
-                                        if (archive && typeof archive.total !== 'undefined') {
-                                            if (Math.abs(archive.total) > 999999) {
-                                                formattedTotal = archive.total.toExponential(2);
-                                            } else {
-                                                formattedTotal = archive.total.toFixed(2);
-                                            }
-                                        }
-                                        
-                                        // Період і кількість днів
-                                        let periodText = archive && archive.period ? archive.period : '';
-                                        let daysCount = archive && archive.daysCount ? archive.daysCount : '0';
-                                        
-                                        div.innerHTML = `
-                                            <div class="flex justify-between items-center">
-                                                <div>
-                                                    <div class="text-white font-bold text-lg flex items-center">
-                                                        <i class="fas fa-calendar-check mr-2 text-blue-400"></i>
-                                                        ${archiveTitle}
-                                                    </div>
-                                                    <div class="text-blue-300 text-sm mt-1">${periodText}</div>
-                                                </div>
-                                                <div class="text-right">
-                                                    <div class="text-green-400 font-bold text-xl">${formattedTotal}</div>
-                                                    <div class="text-blue-300 text-sm">${daysCount} днів</div>
-                                                </div>
-                                            </div>
-                                        `;
-                                        
-                                        div.addEventListener('click', () => {
-                                            let original_month = archiveKey;
-                                            if (archiveKey.includes('-first') || archiveKey.includes('-second')) {
-                                                original_month = archiveKey.split('-').slice(0, 2).join('-');
-                                            }
-                                            
-                                            window.location.href = `archive-detail.html?month=${original_month}&archive_key=${archiveKey}`;
-                                        });
-                                        
-                                        archivesContainer.appendChild(div);
-                                    } catch (error) {
-                                        console.error(`Помилка при ручному відображенні архіву ${archiveKey}:`, error);
-                                    }
-                                });
-                                
-                                // Якщо після всього цього архіви не відображаються - показуємо повідомлення
-                                if (archivesContainer.children.length === 0) {
-                                    archivesContainer.innerHTML = '<div class="text-yellow-300 text-center py-4">Знайдено архіви, але виникла проблема з їх відображенням. Спробуйте натиснути кнопку "Зберегти місяць в архів".</div>';
-                                }
-                            }
-                        } catch (error) {
-                            console.error("Помилка при фінальній перевірці архівів:", error);
-                        }
-                    }
-                }, 1500);
-            });
-            
-            console.log("DOMContentLoaded: Ініціалізація завершена");
+            }, 300);
         });
     </script>
 </body>
