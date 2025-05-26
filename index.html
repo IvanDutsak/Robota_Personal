@@ -1281,11 +1281,11 @@
 
             hideManualModal() {
                 this.manualModal.classList.add('hidden');
-                // Reset form
-                document.getElementById('manual-dc-collected').value = 0;
-                document.getElementById('manual-store-collected').value = 0;
-                document.getElementById('manual-dc-moved').value = 0;
-                document.getElementById('manual-placed').value = 0;
+                // Reset form - встановлюємо порожні рядки замість нулів для числових полів
+                document.getElementById('manual-dc-collected').value = '';
+                document.getElementById('manual-store-collected').value = '';
+                document.getElementById('manual-dc-moved').value = '';
+                document.getElementById('manual-placed').value = '';
                 document.getElementById('manual-work-time-start').value = '';
                 document.getElementById('manual-work-time-end').value = '';
                 document.getElementById('manual-work-time-total').textContent = '0 год 0 хв';
