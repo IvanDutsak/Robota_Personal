@@ -319,7 +319,7 @@
                             </div>
                             <div class="flex items-center space-x-2 sm:space-x-3 w-full sm:w-auto justify-end">
                                 <input type="number" id="dc-collected" class="input-glow text-white rounded-md sm:rounded-lg px-3 py-2 sm:px-4 sm:py-3 w-20 sm:w-24 text-center text-base sm:text-lg font-bold" step="1" min="0" value="" pattern="[0-9]*" inputmode="numeric" max="9999999">
-                                <span class="text-blue-300 font-medium multiplier text-sm sm:text-base">× 1.55 =</span>
+                                <span class="text-blue-300 font-medium multiplier text-sm sm:text-base">× 1.49 =</span>
                                 <div class="result-display text-sm sm:text-base px-3 py-2 sm:px-4 sm:py-3 w-24 sm:w-auto">
                                     <span id="dc-result" class="font-bold number-truncate">0.00</span>
                                 </div>
@@ -355,7 +355,7 @@
                             </div>
                             <div class="flex items-center space-x-2 sm:space-x-3 w-full sm:w-auto justify-end">
                                 <input type="number" id="dc-moved" class="input-glow text-white rounded-md sm:rounded-lg px-3 py-2 sm:px-4 sm:py-3 w-20 sm:w-24 text-center text-base sm:text-lg font-bold" step="1" min="0" value="" pattern="[0-9]*" inputmode="numeric" max="9999999">
-                                <span class="text-blue-300 font-medium multiplier text-sm sm:text-base">× 4.55 =</span>
+                                <span class="text-blue-300 font-medium multiplier text-sm sm:text-base">× 4.26 =</span>
                                 <div class="result-display text-sm sm:text-base px-3 py-2 sm:px-4 sm:py-3 w-24 sm:w-auto">
                                     <span id="moved-result" class="font-bold number-truncate">0.00</span>
                                 </div>
@@ -373,7 +373,7 @@
                             </div>
                             <div class="flex items-center space-x-2 sm:space-x-3 w-full sm:w-auto justify-end">
                                 <input type="number" id="placed" class="input-glow text-white rounded-md sm:rounded-lg px-3 py-2 sm:px-4 sm:py-3 w-20 sm:w-24 text-center text-base sm:text-lg font-bold" step="1" min="0" value="" pattern="[0-9]*" inputmode="numeric" max="9999999">
-                                <span class="text-blue-300 font-medium multiplier text-sm sm:text-base">× 1.77 =</span>
+                                <span class="text-blue-300 font-medium multiplier text-sm sm:text-base">× 1.78 =</span>
                                 <div class="result-display text-sm sm:text-base px-3 py-2 sm:px-4 sm:py-3 w-24 sm:w-auto">
                                     <span id="placed-result" class="font-bold number-truncate">0.00</span>
                                 </div>
@@ -629,10 +629,10 @@
         class WarehouseStats {
             constructor() {
                 this.coefficients = {
-                    dcCollected: 1.55,
+                    dcCollected: 1.49,
                     storeCollected: 3.55,
-                    dcMoved: 4.55,
-                    placed: 1.77
+                    dcMoved: 4.26,
+                    placed: 1.78
                 };
                 this.chart = null;
                 this.initializeElements();
