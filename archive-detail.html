@@ -381,10 +381,10 @@
         class ArchiveDetail {
             constructor() {
                 this.coefficients = {
-                    dcCollected: 1.55,
+                    dcCollected: 1.49,
                     storeCollected: 3.55,
-                    dcMoved: 4.55,
-                    placed: 1.77
+                    dcMoved: 4.26,
+                    placed: 1.78
                 };
                 
                 this.archiveData = null;
@@ -537,7 +537,7 @@
                     totalStoreCollected += day.storeCollected || 0;
                     totalDcMoved += day.dcMoved || 0;
                     totalPlaced += day.placed || 0;
-                    totalWorkTimeMinutes += day.workTimeTotal || 0;
+                    totalWorkTimeMinutes += dayData.workTimeTotal || 0;
                 });
                 
                 this.summaryDcCollected.textContent = totalDcCollected;
@@ -623,7 +623,7 @@
                             <div class="text-blue-200 text-xs sm:text-sm">Зібрано у ДС</div>
                             <div class="flex justify-between items-center mt-0.5 sm:mt-1">
                                 <span class="text-white font-medium text-sm sm:text-base">${dayData.dcCollected || 0}</span>
-                                <span class="text-blue-300 text-xs sm:text-sm">× 1.55</span>
+                                <span class="text-blue-300 text-xs sm:text-sm">× 1.49</span>
                             </div>
                         </div>
                         
@@ -639,7 +639,7 @@
                             <div class="text-blue-200 text-xs sm:text-sm">Переміщено у ДС</div>
                             <div class="flex justify-between items-center mt-0.5 sm:mt-1">
                                 <span class="text-white font-medium text-sm sm:text-base">${dayData.dcMoved || 0}</span>
-                                <span class="text-blue-300 text-xs sm:text-sm">× 4.55</span>
+                                <span class="text-blue-300 text-xs sm:text-sm">× 4.26</span>
                             </div>
                         </div>
                         
@@ -647,7 +647,7 @@
                             <div class="text-blue-200 text-xs sm:text-sm">Розміщено</div>
                             <div class="flex justify-between items-center mt-0.5 sm:mt-1">
                                 <span class="text-white font-medium text-sm sm:text-base">${dayData.placed || 0}</span>
-                                <span class="text-blue-300 text-xs sm:text-sm">× 1.77</span>
+                                <span class="text-blue-300 text-xs sm:text-sm">× 1.78</span>
                             </div>
                         </div>
                     </div>
@@ -1145,7 +1145,7 @@
                                     <div class="text-blue-200 text-sm">Зібрано у ДС</div>
                                     <div class="flex justify-between items-center mt-1">
                                         <span class="text-white font-medium">${totalDcCollected}</span>
-                                        <span class="text-blue-300 text-sm">× 1.55</span>
+                                        <span class="text-blue-300 text-sm">× 1.49</span>
                                     </div>
                                 </div>
                                 
@@ -1161,7 +1161,7 @@
                                     <div class="text-blue-200 text-sm">Переміщено у ДС</div>
                                     <div class="flex justify-between items-center mt-1">
                                         <span class="text-white font-medium">${totalDcMoved}</span>
-                                        <span class="text-blue-300 text-sm">× 4.55</span>
+                                        <span class="text-blue-300 text-sm">× 4.26</span>
                                     </div>
                                 </div>
                                 
@@ -1169,7 +1169,7 @@
                                     <div class="text-blue-200 text-sm">Розміщено</div>
                                     <div class="flex justify-between items-center mt-1">
                                         <span class="text-white font-medium">${totalPlaced}</span>
-                                        <span class="text-blue-300 text-sm">× 1.77</span>
+                                        <span class="text-blue-300 text-sm">× 1.78</span>
                                     </div>
                                 </div>
                             </div>
