@@ -93,6 +93,10 @@
             background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
         }
         
+        .btn-warning {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+        }
+        
         .stat-card {
             background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
             border: 1px solid rgba(255, 255, 255, 0.2);
@@ -281,10 +285,76 @@
             display: block;
         }
         
-        /* Стиль для множників */
         .multiplier {
             white-space: nowrap;
             display: inline-block;
+        }
+        
+        .bonus-indicator {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            box-shadow: 0 2px 10px rgba(16, 185, 129, 0.5);
+            animation: pulse 2s infinite;
+        }
+        
+        .bonus-card {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.2) 0%, rgba(5, 150, 105, 0.1) 100%);
+            border: 2px solid rgba(16, 185, 129, 0.5);
+            box-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
+        }
+        
+        .no-bonus-card {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.2) 0%, rgba(220, 38, 38, 0.1) 100%);
+            border: 2px solid rgba(239, 68, 68, 0.5);
+            box-shadow: 0 0 20px rgba(239, 68, 68, 0.3);
+        }
+        
+        input[type="range"] {
+            -webkit-appearance: none;
+            appearance: none;
+            background: transparent;
+            cursor: pointer;
+            width: 100%;
+        }
+        
+        input[type="range"]::-webkit-slider-track {
+            background: rgba(255, 255, 255, 0.1);
+            height: 8px;
+            border-radius: 5px;
+        }
+        
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            height: 24px;
+            width: 24px;
+            border-radius: 50%;
+            border: 3px solid white;
+            box-shadow: 0 2px 10px rgba(59, 130, 246, 0.5);
+            margin-top: -8px;
+        }
+        
+        input[type="range"]::-moz-range-track {
+            background: rgba(255, 255, 255, 0.1);
+            height: 8px;
+            border-radius: 5px;
+        }
+        
+        input[type="range"]::-moz-range-thumb {
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            height: 24px;
+            width: 24px;
+            border-radius: 50%;
+            border: 3px solid white;
+            box-shadow: 0 2px 10px rgba(59, 130, 246, 0.5);
         }
     </style>
 </head>
@@ -308,6 +378,53 @@
                     Введення даних
                 </h2>
                 
+                <!-- Секція премій -->
+                <div class="mb-6 space-y-4">
+                    <div class="stat-card rounded-lg sm:rounded-xl p-3 sm:p-4 md:p-5 bonus-card" id="rating-card">
+                        <div class="relative">
+                            <span class="bonus-indicator" id="rating-bonus-indicator" style="display: none;">+15%</span>
+                            <div class="flex items-center mb-3">
+                                <div class="bg-yellow-500 p-2 sm:p-3 rounded-full mr-2 sm:mr-3 md:mr-4">
+                                    <i class="fas fa-star text-white text-base sm:text-lg"></i>
+                                </div>
+                                <span class="text-white font-semibold text-base sm:text-lg">Середня оцінка</span>
+                            </div>
+                            <div class="space-y-3">
+                                <input type="range" id="average-rating" min="1" max="5" step="0.1" value="4.0" class="w-full">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-blue-300 text-sm">Поточна оцінка:</span>
+                                    <span id="rating-value" class="text-white font-bold text-lg">4.0</span>
+                                </div>
+                                <div id="rating-message" class="text-center py-2 px-3 rounded-lg bg-white bg-opacity-10">
+                                    <span class="text-yellow-300 text-sm">Потрібна оцінка 4.8+ для премії</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card rounded-lg sm:rounded-xl p-3 sm:p-4 md:p-5 bonus-card" id="accuracy-card">
+                        <div class="relative">
+                            <span class="bonus-indicator" id="accuracy-bonus-indicator" style="display: none;">+15%</span>
+                            <div class="flex items-center mb-3">
+                                <div class="bg-indigo-500 p-2 sm:p-3 rounded-full mr-2 sm:mr-3 md:mr-4">
+                                    <i class="fas fa-bullseye text-white text-base sm:text-lg"></i>
+                                </div>
+                                <span class="text-white font-semibold text-base sm:text-lg">Точність збирання</span>
+                            </div>
+                            <div class="space-y-3">
+                                <input type="range" id="picking-accuracy" min="80" max="100" step="0.5" value="95" class="w-full">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-blue-300 text-sm">Поточна точність:</span>
+                                    <span id="accuracy-value" class="text-white font-bold text-lg">95.0%</span>
+                                </div>
+                                <div id="accuracy-message" class="text-center py-2 px-3 rounded-lg bg-white bg-opacity-10">
+                                    <span class="text-yellow-300 text-sm">Потрібна точність 96%+ для премії</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
                 <div class="space-y-4 sm:space-y-5">
                     <div class="stat-card rounded-lg sm:rounded-xl p-3 sm:p-4 md:p-5">
                         <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between">
@@ -319,7 +436,7 @@
                             </div>
                             <div class="flex items-center space-x-2 sm:space-x-3 w-full sm:w-auto justify-end">
                                 <input type="number" id="dc-collected" class="input-glow text-white rounded-md sm:rounded-lg px-3 py-2 sm:px-4 sm:py-3 w-20 sm:w-24 text-center text-base sm:text-lg font-bold" step="1" min="0" value="" pattern="[0-9]*" inputmode="numeric" max="9999999">
-                                <span class="text-blue-300 font-medium multiplier text-sm sm:text-base">× 1.49 =</span>
+                                <span class="text-blue-300 font-medium multiplier text-sm sm:text-base">× 1.40 =</span>
                                 <div class="result-display text-sm sm:text-base px-3 py-2 sm:px-4 sm:py-3 w-24 sm:w-auto">
                                     <span id="dc-result" class="font-bold number-truncate">0.00</span>
                                 </div>
@@ -333,11 +450,11 @@
                                 <div class="bg-green-500 p-2 sm:p-3 rounded-full mr-2 sm:mr-3 md:mr-4">
                                     <i class="fas fa-store text-white text-base sm:text-lg"></i>
                                 </div>
-                                <span class="text-white font-semibold text-base sm:text-lg">Зібрано у магазині</span>
+                                <span class="text-white font-semibold text-base sm:text-lg">Зібрано у ТЗ</span>
                             </div>
                             <div class="flex items-center space-x-2 sm:space-x-3 w-full sm:w-auto justify-end">
                                 <input type="number" id="store-collected" class="input-glow text-white rounded-md sm:rounded-lg px-3 py-2 sm:px-4 sm:py-3 w-20 sm:w-24 text-center text-base sm:text-lg font-bold" step="1" min="0" value="" pattern="[0-9]*" inputmode="numeric" max="9999999">
-                                <span class="text-blue-300 font-medium multiplier text-sm sm:text-base">× 3.55 =</span>
+                                <span class="text-blue-300 font-medium multiplier text-sm sm:text-base">× 2.80 =</span>
                                 <div class="result-display text-sm sm:text-base px-3 py-2 sm:px-4 sm:py-3 w-24 sm:w-auto">
                                     <span id="store-result" class="font-bold number-truncate">0.00</span>
                                 </div>
@@ -351,11 +468,11 @@
                                 <div class="bg-purple-500 p-2 sm:p-3 rounded-full mr-2 sm:mr-3 md:mr-4">
                                     <i class="fas fa-exchange-alt text-white text-base sm:text-lg"></i>
                                 </div>
-                                <span class="text-white font-semibold text-base sm:text-lg">Переміщено у ДС</span>
+                                <span class="text-white font-semibold text-base sm:text-lg">Переміщено товарів</span>
                             </div>
                             <div class="flex items-center space-x-2 sm:space-x-3 w-full sm:w-auto justify-end">
                                 <input type="number" id="dc-moved" class="input-glow text-white rounded-md sm:rounded-lg px-3 py-2 sm:px-4 sm:py-3 w-20 sm:w-24 text-center text-base sm:text-lg font-bold" step="1" min="0" value="" pattern="[0-9]*" inputmode="numeric" max="9999999">
-                                <span class="text-blue-300 font-medium multiplier text-sm sm:text-base">× 4.26 =</span>
+                                <span class="text-blue-300 font-medium multiplier text-sm sm:text-base">× 3.45 =</span>
                                 <div class="result-display text-sm sm:text-base px-3 py-2 sm:px-4 sm:py-3 w-24 sm:w-auto">
                                     <span id="moved-result" class="font-bold number-truncate">0.00</span>
                                 </div>
@@ -369,13 +486,51 @@
                                 <div class="bg-orange-500 p-2 sm:p-3 rounded-full mr-2 sm:mr-3 md:mr-4">
                                     <i class="fas fa-box-open text-white text-base sm:text-lg"></i>
                                 </div>
-                                <span class="text-white font-semibold text-base sm:text-lg">Розміщено</span>
+                                <span class="text-white font-semibold text-base sm:text-lg">Розміщено товарів</span>
                             </div>
                             <div class="flex items-center space-x-2 sm:space-x-3 w-full sm:w-auto justify-end">
                                 <input type="number" id="placed" class="input-glow text-white rounded-md sm:rounded-lg px-3 py-2 sm:px-4 sm:py-3 w-20 sm:w-24 text-center text-base sm:text-lg font-bold" step="1" min="0" value="" pattern="[0-9]*" inputmode="numeric" max="9999999">
-                                <span class="text-blue-300 font-medium multiplier text-sm sm:text-base">× 1.78 =</span>
+                                <span class="text-blue-300 font-medium multiplier text-sm sm:text-base">× 1.59 =</span>
                                 <div class="result-display text-sm sm:text-base px-3 py-2 sm:px-4 sm:py-3 w-24 sm:w-auto">
                                     <span id="placed-result" class="font-bold number-truncate">0.00</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- НОВИЙ ПОКАЗНИК: Вага за розміщення у ДС -->
+                    <div class="stat-card rounded-lg sm:rounded-xl p-3 sm:p-4 md:p-5">
+                        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between">
+                            <div class="flex items-center mb-2 sm:mb-0">
+                                <div class="bg-cyan-500 p-2 sm:p-3 rounded-full mr-2 sm:mr-3 md:mr-4">
+                                    <i class="fas fa-weight text-white text-base sm:text-lg"></i>
+                                </div>
+                                <span class="text-white font-semibold text-base sm:text-lg">Вага розміщення (кг)</span>
+                            </div>
+                            <div class="flex items-center space-x-2 sm:space-x-3 w-full sm:w-auto justify-end">
+                                <input type="number" id="weight-placement" class="input-glow text-white rounded-md sm:rounded-lg px-3 py-2 sm:px-4 sm:py-3 w-20 sm:w-24 text-center text-base sm:text-lg font-bold" step="0.1" min="0" value="" pattern="[0-9]*\.?[0-9]*" inputmode="decimal" max="9999999">
+                                <span class="text-blue-300 font-medium multiplier text-sm sm:text-base">× 0.14 =</span>
+                                <div class="result-display text-sm sm:text-base px-3 py-2 sm:px-4 sm:py-3 w-24 sm:w-auto">
+                                    <span id="weight-result" class="font-bold number-truncate">0.00</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- НОВИЙ ПОКАЗНИК: Пакування замовлення -->
+                    <div class="stat-card rounded-lg sm:rounded-xl p-3 sm:p-4 md:p-5">
+                        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between">
+                            <div class="flex items-center mb-2 sm:mb-0">
+                                <div class="bg-pink-500 p-2 sm:p-3 rounded-full mr-2 sm:mr-3 md:mr-4">
+                                    <i class="fas fa-gift text-white text-base sm:text-lg"></i>
+                                </div>
+                                <span class="text-white font-semibold text-base sm:text-lg">Пакування (артикулів)</span>
+                            </div>
+                            <div class="flex items-center space-x-2 sm:space-x-3 w-full sm:w-auto justify-end">
+                                <input type="number" id="packing-order" class="input-glow text-white rounded-md sm:rounded-lg px-3 py-2 sm:px-4 sm:py-3 w-20 sm:w-24 text-center text-base sm:text-lg font-bold" step="1" min="0" value="" pattern="[0-9]*" inputmode="numeric" max="9999999">
+                                <span class="text-blue-300 font-medium multiplier text-sm sm:text-base">× 0.28 =</span>
+                                <div class="result-display text-sm sm:text-base px-3 py-2 sm:px-4 sm:py-3 w-24 sm:w-auto">
+                                    <span id="packing-result" class="font-bold number-truncate">0.00</span>
                                 </div>
                             </div>
                         </div>
@@ -417,7 +572,13 @@
                             <i class="fas fa-trophy text-white text-xl sm:text-2xl mr-2 sm:mr-3"></i>
                             <span class="text-white font-bold text-lg sm:text-xl md:text-2xl">Загальний результат:</span>
                         </div>
-                        <span id="total-result" class="text-white font-bold text-2xl sm:text-3xl">0.00</span>
+                        <div class="text-center">
+                            <span id="total-result" class="text-white font-bold text-2xl sm:text-3xl">0.00</span>
+                            <div id="total-with-bonus" class="text-white text-sm mt-1" style="display: none;">
+                                <span class="font-semibold">З преміями: </span>
+                                <span id="total-bonus-value" class="text-green-300 font-bold text-lg">0.00</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -489,7 +650,7 @@
 
                 <!-- Chart -->
                 <div class="chart-container mb-4 sm:mb-6 md:mb-8 p-2 sm:p-3 md:p-4">
-                    <canvas id="statsChart"></canvas> <!-- Removed fixed width/height, relying on maintainAspectRatio: false -->
+                    <canvas id="statsChart"></canvas>
                 </div>
 
                 <!-- Monthly Management -->
@@ -549,19 +710,31 @@
                         <input type="number" id="manual-dc-collected" class="input-glow text-white rounded-md sm:rounded-lg px-3 py-2 sm:px-4 sm:py-3 w-full text-sm sm:text-base" step="1" min="0" value="" pattern="[0-9]*" inputmode="numeric" max="9999999">
                     </div>
                     <div>
-                        <label class="block text-blue-200 text-xs sm:text-sm font-medium mb-1 sm:mb-2">Зібрано у магазині:</label>
+                        <label class="block text-blue-200 text-xs sm:text-sm font-medium mb-1 sm:mb-2">Зібрано у ТЗ:</label>
                         <input type="number" id="manual-store-collected" class="input-glow text-white rounded-md sm:rounded-lg px-3 py-2 sm:px-4 sm:py-3 w-full text-sm sm:text-base" step="1" min="0" value="" pattern="[0-9]*" inputmode="numeric" max="9999999">
                     </div>
                 </div>
                 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                     <div>
-                        <label class="block text-blue-200 text-xs sm:text-sm font-medium mb-1 sm:mb-2">Переміщено у ДС:</label>
+                        <label class="block text-blue-200 text-xs sm:text-sm font-medium mb-1 sm:mb-2">Переміщено товарів:</label>
                         <input type="number" id="manual-dc-moved" class="input-glow text-white rounded-md sm:rounded-lg px-3 py-2 sm:px-4 sm:py-3 w-full text-sm sm:text-base" step="1" min="0" value="" pattern="[0-9]*" inputmode="numeric" max="9999999">
                     </div>
                     <div>
-                        <label class="block text-blue-200 text-xs sm:text-sm font-medium mb-1 sm:mb-2">Розміщено:</label>
+                        <label class="block text-blue-200 text-xs sm:text-sm font-medium mb-1 sm:mb-2">Розміщено товарів:</label>
                         <input type="number" id="manual-placed" class="input-glow text-white rounded-md sm:rounded-lg px-3 py-2 sm:px-4 sm:py-3 w-full text-sm sm:text-base" step="1" min="0" value="" pattern="[0-9]*" inputmode="numeric" max="9999999">
+                    </div>
+                </div>
+
+                <!-- НОВІ ПОЛЯ для модального вікна -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                    <div>
+                        <label class="block text-blue-200 text-xs sm:text-sm font-medium mb-1 sm:mb-2">Вага розміщення (кг):</label>
+                        <input type="number" id="manual-weight-placement" class="input-glow text-white rounded-md sm:rounded-lg px-3 py-2 sm:px-4 sm:py-3 w-full text-sm sm:text-base" step="0.1" min="0" value="" pattern="[0-9]*\.?[0-9]*" inputmode="decimal" max="9999999">
+                    </div>
+                    <div>
+                        <label class="block text-blue-200 text-xs sm:text-sm font-medium mb-1 sm:mb-2">Пакування (артикулів):</label>
+                        <input type="number" id="manual-packing-order" class="input-glow text-white rounded-md sm:rounded-lg px-3 py-2 sm:px-4 sm:py-3 w-full text-sm sm:text-base" step="1" min="0" value="" pattern="[0-9]*" inputmode="numeric" max="9999999">
                     </div>
                 </div>
 
@@ -587,6 +760,19 @@
                             <span class="text-blue-200 text-xs sm:text-sm">Загальний час роботи:</span>
                             <span id="manual-work-time-total" class="text-white font-bold text-sm sm:text-base">0 год 0 хв</span>
                         </div>
+                    </div>
+                </div>
+                
+                <!-- Додаємо поля для оцінки та точності в модальному вікні -->
+                <div class="mt-3 sm:mt-4 md:mt-5 space-y-3">
+                    <div class="bg-white bg-opacity-5 rounded-lg sm:rounded-xl p-3 sm:p-4">
+                        <label class="block text-blue-200 text-xs sm:text-sm font-medium mb-2">Середня оцінка:</label>
+                        <input type="number" id="manual-rating" class="input-glow text-white rounded-md sm:rounded-lg px-3 py-2 sm:px-4 sm:py-3 w-full text-sm sm:text-base" step="0.1" min="1" max="5" value="4.0">
+                    </div>
+                    
+                    <div class="bg-white bg-opacity-5 rounded-lg sm:rounded-xl p-3 sm:p-4">
+                        <label class="block text-blue-200 text-xs sm:text-sm font-medium mb-2">Точність збирання (%):</label>
+                        <input type="number" id="manual-accuracy" class="input-glow text-white rounded-md sm:rounded-lg px-3 py-2 sm:px-4 sm:py-3 w-full text-sm sm:text-base" step="0.5" min="80" max="100" value="95">
                     </div>
                 </div>
             </div>
@@ -628,12 +814,22 @@
     <script>
         class WarehouseStats {
             constructor() {
+                // ОНОВЛЕНІ КОЕФІЦІЄНТИ з доданими новими
                 this.coefficients = {
-                    dcCollected: 1.49,
-                    storeCollected: 3.55,
-                    dcMoved: 4.26,
-                    placed: 1.78
+                    dcCollected: 1.40,
+                    storeCollected: 2.80,
+                    dcMoved: 3.45,
+                    placed: 1.59,
+                    weightPlacement: 0.14,  // НОВИЙ коефіцієнт
+                    packingOrder: 0.28      // НОВИЙ коефіцієнт
                 };
+                
+                // Коефіцієнти бонусів
+                this.bonusCoefficients = {
+                    rating: 1.15,           // якщо оцінка 4.8+
+                    accuracy: 1.15          // якщо точність 96%+
+                };
+                
                 this.chart = null;
                 this.initializeElements();
                 this.bindEvents();
@@ -643,12 +839,10 @@
                 this.loadMonthlyArchives();
                 this.addLoadingAnimations();
                 
-                // Зберігаємо екземпляр класу в глобальній змінній для доступу ззовні
                 window.warehouseStatsInstance = this;
             }
 
             addLoadingAnimations() {
-                // Add loading spinners to buttons when processing
                 const buttons = document.querySelectorAll('button');
                 buttons.forEach(btn => {
                     btn.addEventListener('click', (e) => {
@@ -670,88 +864,119 @@
             initializeElements() {
                 try {
                     // Основні елементи вводу
-                this.dcCollectedInput = document.getElementById('dc-collected');
-                this.storeCollectedInput = document.getElementById('store-collected');
-                this.dcMovedInput = document.getElementById('dc-moved');
-                this.placedInput = document.getElementById('placed');
-                
+                    this.dcCollectedInput = document.getElementById('dc-collected');
+                    this.storeCollectedInput = document.getElementById('store-collected');
+                    this.dcMovedInput = document.getElementById('dc-moved');
+                    this.placedInput = document.getElementById('placed');
+                    this.weightPlacementInput = document.getElementById('weight-placement'); // НОВИЙ
+                    this.packingOrderInput = document.getElementById('packing-order'); // НОВИЙ
+                    
                     // Елементи результатів
-                this.dcResult = document.getElementById('dc-result');
-                this.storeResult = document.getElementById('store-result');
-                this.movedResult = document.getElementById('moved-result');
-                this.placedResult = document.getElementById('placed-result');
-                this.totalResult = document.getElementById('total-result');
-                
+                    this.dcResult = document.getElementById('dc-result');
+                    this.storeResult = document.getElementById('store-result');
+                    this.movedResult = document.getElementById('moved-result');
+                    this.placedResult = document.getElementById('placed-result');
+                    this.weightResult = document.getElementById('weight-result'); // НОВИЙ
+                    this.packingResult = document.getElementById('packing-result'); // НОВИЙ
+                    this.totalResult = document.getElementById('total-result');
+                    
+                    // Елементи бонусів
+                    this.averageRating = document.getElementById('average-rating');
+                    this.pickingAccuracy = document.getElementById('picking-accuracy');
+                    this.ratingValue = document.getElementById('rating-value');
+                    this.accuracyValue = document.getElementById('accuracy-value');
+                    
                     // Кнопки
-                this.saveBtn = document.getElementById('save-btn');
-                this.addManualBtn = document.getElementById('add-manual-btn');
-                this.clearInputsBtn = document.getElementById('clear-inputs-btn'); // Нова кнопка
-                this.autoRangeBtn = document.getElementById('auto-range-btn');
-                this.clearMonthBtn = document.getElementById('clear-month-btn');
-                this.deleteAllArchivesBtn = document.getElementById('delete-all-archives-btn'); // Нова кнопка
-                
+                    this.saveBtn = document.getElementById('save-btn');
+                    this.addManualBtn = document.getElementById('add-manual-btn');
+                    this.clearInputsBtn = document.getElementById('clear-inputs-btn');
+                    this.autoRangeBtn = document.getElementById('auto-range-btn');
+                    this.clearMonthBtn = document.getElementById('clear-month-btn');
+                    this.deleteAllArchivesBtn = document.getElementById('delete-all-archives-btn');
+                    
                     // Поля дат
-                this.dateFrom = document.getElementById('date-from');
-                this.dateTo = document.getElementById('date-to');
-                
+                    this.dateFrom = document.getElementById('date-from');
+                    this.dateTo = document.getElementById('date-to');
+                    
                     // Модальні вікна
-                this.manualModal = document.getElementById('manual-modal');
-                this.clearModal = document.getElementById('clear-modal');
+                    this.manualModal = document.getElementById('manual-modal');
+                    this.clearModal = document.getElementById('clear-modal');
                     
-                    // Перевіряємо, чи всі критично важливі елементи знайдені
-                    const criticalElements = [
-                        { name: 'dcCollectedInput', element: this.dcCollectedInput },
-                        { name: 'storeCollectedInput', element: this.storeCollectedInput },
-                        { name: 'dcMovedInput', element: this.dcMovedInput },
-                        { name: 'placedInput', element: this.placedInput },
-                        { name: 'totalResult', element: this.totalResult },
-                        { name: 'saveBtn', element: this.saveBtn }
-                    ];
-                    
-                    const missingElements = criticalElements.filter(item => !item.element);
-                    if (missingElements.length > 0) {
-                        console.warn('Не знайдено наступні елементи:', missingElements.map(item => item.name).join(', '));
-                    }
                 } catch (error) {
                     console.error('Помилка в initializeElements:', error);
                 }
             }
 
             bindEvents() {
-                // Додаємо безпечні перевірки для всіх елементів перед прив'язкою подій
                 const safeAddEventListener = (element, event, handler) => {
                     if (element) {
                         element.addEventListener(event, handler);
-                    } else {
-                        console.warn(`Елемент не знайдено для події ${event}`);
                     }
                 };
                 
-                // Безпечно додаємо обробники подій до інпутів
-                [this.dcCollectedInput, this.storeCollectedInput, this.dcMovedInput, this.placedInput]
-                    .filter(input => input) // фільтруємо null-елементи
+                // Обробники для основних інпутів (додаємо нові)
+                [this.dcCollectedInput, this.storeCollectedInput, this.dcMovedInput, 
+                 this.placedInput, this.packingOrderInput]
+                    .filter(input => input)
                     .forEach(input => {
-                        // Додаємо обробник для фільтрації неприпустимих символів
                         safeAddEventListener(input, 'keypress', (e) => {
-                            // Дозволяємо лише цифри
                             if (!/[0-9]/.test(e.key)) {
                                 e.preventDefault();
                             }
                         });
                         
                         safeAddEventListener(input, 'input', () => {
-                            // Видаляємо всі не-цифри, якщо вони були введені
                             input.value = input.value.replace(/[^0-9]/g, '');
-                            
-                            // Перевіряємо, чи не перевищує значення максимально допустиме
                             if (parseFloat(input.value) > 9999999) {
                                 input.value = 9999999;
                             }
-                            
                             this.updateCalculations();
                             this.animateResultUpdate(input);
                         });
                     });
+
+                // Обробник для поля ваги (дозволяємо десяткові числа)
+                if (this.weightPlacementInput) {
+                    safeAddEventListener(this.weightPlacementInput, 'keypress', (e) => {
+                        const char = String.fromCharCode(e.which);
+                        if (!/[0-9.]/.test(char)) {
+                            e.preventDefault();
+                        }
+                        // Дозволяємо лише одну крапку
+                        if (char === '.' && this.weightPlacementInput.value.includes('.')) {
+                            e.preventDefault();
+                        }
+                    });
+                    
+                    safeAddEventListener(this.weightPlacementInput, 'input', () => {
+                        // Видаляємо всі символи крім цифр та крапки
+                        let value = this.weightPlacementInput.value.replace(/[^0-9.]/g, '');
+                        // Залишаємо лише одну крапку
+                        const parts = value.split('.');
+                        if (parts.length > 2) {
+                            value = parts[0] + '.' + parts.slice(1).join('');
+                        }
+                        this.weightPlacementInput.value = value;
+                        if (parseFloat(value) > 9999999) {
+                            this.weightPlacementInput.value = 9999999;
+                        }
+                        this.updateCalculations();
+                        this.animateResultUpdate(this.weightPlacementInput);
+                    });
+                }
+                
+                // Обробники для слайдерів бонусів
+                safeAddEventListener(this.averageRating, 'input', () => {
+                    this.ratingValue.textContent = parseFloat(this.averageRating.value).toFixed(1);
+                    this.updateBonusDisplay();
+                    this.updateCalculations();
+                });
+                
+                safeAddEventListener(this.pickingAccuracy, 'input', () => {
+                    this.accuracyValue.textContent = parseFloat(this.pickingAccuracy.value).toFixed(1) + '%';
+                    this.updateBonusDisplay();
+                    this.updateCalculations();
+                });
                 
                 // Обробники для полів робочого часу
                 const workTimeStart = document.getElementById('work-time-start');
@@ -764,29 +989,28 @@
                     });
                 });
                 
-                // Додаємо обробники для основних кнопок
+                // Основні кнопки
                 safeAddEventListener(this.saveBtn, 'click', () => this.saveData());
                 safeAddEventListener(this.addManualBtn, 'click', () => this.showManualModal());
-                safeAddEventListener(this.clearInputsBtn, 'click', () => this.clearInputFields()); // Обробник для нової кнопки
+                safeAddEventListener(this.clearInputsBtn, 'click', () => this.clearInputFields());
                 safeAddEventListener(this.autoRangeBtn, 'click', () => this.setAutoRange());
                 safeAddEventListener(this.clearMonthBtn, 'click', () => this.showClearModal());
-                safeAddEventListener(this.deleteAllArchivesBtn, 'click', () => this.confirmDeleteAllArchives()); // Обробник для нової кнопки
+                safeAddEventListener(this.deleteAllArchivesBtn, 'click', () => this.confirmDeleteAllArchives());
                 
-                // Додаємо обробник для кнопки збереження в архів
                 const saveToArchiveBtn = document.getElementById('save-to-archive-btn');
                 safeAddEventListener(saveToArchiveBtn, 'click', () => this.saveToArchive());
                 
-                // Додаємо обробники для полів дат
+                // Поля дат
                 [this.dateFrom, this.dateTo].filter(input => input).forEach(input => 
                     safeAddEventListener(input, 'change', () => this.updateStatistics()));
                 
-                // Manual modal events
+                // Manual modal
                 const manualSaveBtn = document.getElementById('manual-save-btn');
                 const manualCancelBtn = document.getElementById('manual-cancel-btn');
                 safeAddEventListener(manualSaveBtn, 'click', () => this.saveManualData());
                 safeAddEventListener(manualCancelBtn, 'click', () => this.hideManualModal());
                 
-                // Clear modal events
+                // Clear modal
                 const clearSaveBtn = document.getElementById('clear-save-btn');
                 const clearNoSaveBtn = document.getElementById('clear-no-save-btn');
                 const clearCancelBtn = document.getElementById('clear-cancel-btn');
@@ -794,82 +1018,106 @@
                 safeAddEventListener(clearNoSaveBtn, 'click', () => this.clearMonth(false));
                 safeAddEventListener(clearCancelBtn, 'click', () => this.hideClearModal());
                 
-                // Додаємо обробники для полів у модальному вікні
-                ['manual-dc-collected', 'manual-store-collected', 'manual-dc-moved', 'manual-placed'].forEach(id => {
+                // Поля у модальному вікні (додаємо нові)
+                ['manual-dc-collected', 'manual-store-collected', 'manual-dc-moved', 
+                 'manual-placed', 'manual-packing-order'].forEach(id => {
                     const input = document.getElementById(id);
                     if (input) {
                         safeAddEventListener(input, 'keypress', (e) => {
-                            // Дозволяємо лише цифри
                             if (!/[0-9]/.test(e.key)) {
                                 e.preventDefault();
                             }
                         });
                         
                         safeAddEventListener(input, 'input', () => {
-                            // Видаляємо всі не-цифри, якщо вони були введені
                             input.value = input.value.replace(/[^0-9]/g, '');
-                            
-                            // Перевіряємо максимальне значення
                             if (parseFloat(input.value) > 9999999) {
                                 input.value = 9999999;
                             }
                         });
                     }
                 });
-                
-                // Обробники для кнопок у модальних вікнах архіву
-                // Ці елементи можуть бути створені динамічно, тому додаємо делеговану обробку подій
-                document.addEventListener('click', (e) => {
-                    // Перевіряємо, чи це потрібна кнопка за id або класом
-                    if (e.target && e.target.id === 'archive-cancel-btn') {
-                        // Знаходимо модальне вікно-батьківський елемент
-                        const modal = e.target.closest('.modal-backdrop');
-                        if (modal) modal.remove();
-                    }
-                    
-                    if (e.target && e.target.id === 'archive-confirm-btn') {
-                        // Знаходимо модальне вікно-батьківський елемент
-                        const modal = e.target.closest('.modal-backdrop');
-                        if (modal) {
-                            modal.remove();
-                            
-                            // Отримуємо поточний місяць і назву для відображення
-                            const currentMonth = new Date().toISOString().slice(0, 7);
-                            const [year, monthNum] = currentMonth.split('-');
-                            const monthNames = ['Січень', 'Лютий', 'Березень', 'Квітень', 'Травень', 'Червень', 'Липень', 'Серпень', 'Вересень', 'Жовтень', 'Листопад', 'Грудень'];
-                            const monthName = monthNames[parseInt(monthNum) - 1];
-                            
-                            // Отримуємо дані поточного місяця
-                            const savedData = JSON.parse(localStorage.getItem('warehouseData') || '{}');
-                            const currentMonthData = {};
-                            Object.keys(savedData).forEach(date => {
-                                if (date.startsWith(currentMonth)) {
-                                    currentMonthData[date] = savedData[date];
-                                }
-                            });
-                            
-                            // Показуємо діалогове вікно для вибору половини місяця
-                            this.showMonthHalfSelector(currentMonthData, currentMonth, monthName);
+
+                // Обробник для поля ваги в модальному вікні
+                const manualWeightInput = document.getElementById('manual-weight-placement');
+                if (manualWeightInput) {
+                    safeAddEventListener(manualWeightInput, 'keypress', (e) => {
+                        const char = String.fromCharCode(e.which);
+                        if (!/[0-9.]/.test(char)) {
+                            e.preventDefault();
                         }
-                    }
-                });
+                        if (char === '.' && manualWeightInput.value.includes('.')) {
+                            e.preventDefault();
+                        }
+                    });
+                    
+                    safeAddEventListener(manualWeightInput, 'input', () => {
+                        let value = manualWeightInput.value.replace(/[^0-9.]/g, '');
+                        const parts = value.split('.');
+                        if (parts.length > 2) {
+                            value = parts[0] + '.' + parts.slice(1).join('');
+                        }
+                        manualWeightInput.value = value;
+                        if (parseFloat(value) > 9999999) {
+                            manualWeightInput.value = 9999999;
+                        }
+                    });
+                }
                 
-                // Додаємо обробник для кнопки "Перейти до архіву"
+                // Кнопка переходу до архіву
                 const goToArchiveBtn = document.getElementById('go-to-archive-btn');
                 safeAddEventListener(goToArchiveBtn, 'click', () => {
                     window.location.href = 'archive-list.html';
                 });
 
-                // Обробники для полів робочого часу в модальному вікні "Додати вручну"
+                // Робочий час у модальному вікні
                 const manualWorkTimeStart = document.getElementById('manual-work-time-start');
                 const manualWorkTimeEnd = document.getElementById('manual-work-time-end');
 
                 [manualWorkTimeStart, manualWorkTimeEnd].filter(input => input).forEach(input => {
                     safeAddEventListener(input, 'change', () => {
-                        this.validateTimeInput(input); // Валідація введеного часу
-                        this.updateManualWorkTimeTotal(); // Оновлення загального часу
+                        this.validateTimeInput(input);
+                        this.updateManualWorkTimeTotal();
                     });
                 });
+            }
+
+            updateBonusDisplay() {
+                const rating = parseFloat(this.averageRating.value);
+                const accuracy = parseFloat(this.pickingAccuracy.value);
+                
+                const ratingCard = document.getElementById('rating-card');
+                const accuracyCard = document.getElementById('accuracy-card');
+                const ratingMessage = document.getElementById('rating-message');
+                const accuracyMessage = document.getElementById('accuracy-message');
+                const ratingIndicator = document.getElementById('rating-bonus-indicator');
+                const accuracyIndicator = document.getElementById('accuracy-bonus-indicator');
+                
+                // Перевірка оцінки
+                if (rating >= 4.8) {
+                    ratingCard.classList.add('bonus-card');
+                    ratingCard.classList.remove('no-bonus-card');
+                    ratingMessage.innerHTML = '<span class="text-green-300 text-sm font-semibold"><i class="fas fa-check-circle mr-1"></i>Премія за оцінку нарахована! +15%</span>';
+                    ratingIndicator.style.display = 'block';
+                } else {
+                    ratingCard.classList.remove('bonus-card');
+                    ratingCard.classList.add('no-bonus-card');
+                    ratingMessage.innerHTML = '<span class="text-red-300 text-sm"><i class="fas fa-times-circle mr-1"></i>Ваша оцінка недостатня для нарахування премії</span>';
+                    ratingIndicator.style.display = 'none';
+                }
+                
+                // Перевірка точності
+                if (accuracy >= 96) {
+                    accuracyCard.classList.add('bonus-card');
+                    accuracyCard.classList.remove('no-bonus-card');
+                    accuracyMessage.innerHTML = '<span class="text-green-300 text-sm font-semibold"><i class="fas fa-check-circle mr-1"></i>Премія за точність нарахована! +15%</span>';
+                    accuracyIndicator.style.display = 'block';
+                } else {
+                    accuracyCard.classList.remove('bonus-card');
+                    accuracyCard.classList.add('no-bonus-card');
+                    accuracyMessage.innerHTML = '<span class="text-red-300 text-sm"><i class="fas fa-times-circle mr-1"></i>Ваша точність недостатня для нарахування премії</span>';
+                    accuracyIndicator.style.display = 'none';
+                }
             }
 
             animateResultUpdate(input) {
@@ -890,19 +1138,51 @@
                 const storeCollected = parseFloat(this.storeCollectedInput.value) || 0;
                 const dcMoved = parseFloat(this.dcMovedInput.value) || 0;
                 const placed = parseFloat(this.placedInput.value) || 0;
+                const weightPlacement = parseFloat(this.weightPlacementInput.value) || 0; // НОВИЙ
+                const packingOrder = parseFloat(this.packingOrderInput.value) || 0; // НОВИЙ
                 
                 const dcResult = dcCollected * this.coefficients.dcCollected;
                 const storeResult = storeCollected * this.coefficients.storeCollected;
                 const movedResult = dcMoved * this.coefficients.dcMoved;
                 const placedResult = placed * this.coefficients.placed;
+                const weightResult = weightPlacement * this.coefficients.weightPlacement; // НОВИЙ
+                const packingResult = packingOrder * this.coefficients.packingOrder; // НОВИЙ
                 
                 this.animateNumberChange(this.dcResult, dcResult);
                 this.animateNumberChange(this.storeResult, storeResult);
                 this.animateNumberChange(this.movedResult, movedResult);
                 this.animateNumberChange(this.placedResult, placedResult);
+                this.animateNumberChange(this.weightResult, weightResult); // НОВИЙ
+                this.animateNumberChange(this.packingResult, packingResult); // НОВИЙ
                 
-                const total = dcResult + storeResult + movedResult + placedResult;
+                const total = dcResult + storeResult + movedResult + placedResult + weightResult + packingResult; // ОНОВЛЕНО
                 this.animateNumberChange(this.totalResult, total);
+                
+                // Розрахунок з бонусами
+                const rating = parseFloat(this.averageRating.value);
+                const accuracy = parseFloat(this.pickingAccuracy.value);
+                
+                let totalWithBonuses = total;
+                let bonusMultiplier = 1;
+                
+                if (rating >= 4.8) {
+                    bonusMultiplier *= this.bonusCoefficients.rating;
+                }
+                if (accuracy >= 96) {
+                    bonusMultiplier *= this.bonusCoefficients.accuracy;
+                }
+                
+                totalWithBonuses = total * bonusMultiplier;
+                
+                const totalWithBonusDiv = document.getElementById('total-with-bonus');
+                const totalBonusValue = document.getElementById('total-bonus-value');
+                
+                if (bonusMultiplier > 1) {
+                    totalWithBonusDiv.style.display = 'block';
+                    this.animateNumberChange(totalBonusValue, totalWithBonuses);
+                } else {
+                    totalWithBonusDiv.style.display = 'none';
+                }
             }
 
             animateNumberChange(element, newValue) {
@@ -919,7 +1199,7 @@
                     if (Math.abs(currentValue) > 999999) {
                         element.textContent = currentValue.toExponential(2);
                     } else {
-                    element.textContent = currentValue.toFixed(2);
+                        element.textContent = currentValue.toFixed(2);
                     }
                     
                     if (progress < 1) {
@@ -933,7 +1213,7 @@
             saveData() {
                 const now = new Date();
                 const year = now.getFullYear();
-                const month = (now.getMonth() + 1).toString().padStart(2, '0'); // getMonth() is 0-indexed
+                const month = (now.getMonth() + 1).toString().padStart(2, '0');
                 const day = now.getDate().toString().padStart(2, '0');
                 const today = `${year}-${month}-${day}`;
 
@@ -941,19 +1221,32 @@
                 const storeCollected = parseFloat(this.storeCollectedInput.value) || 0;
                 const dcMoved = parseFloat(this.dcMovedInput.value) || 0;
                 const placed = parseFloat(this.placedInput.value) || 0;
+                const weightPlacement = parseFloat(this.weightPlacementInput.value) || 0; // НОВИЙ
+                const packingOrder = parseFloat(this.packingOrderInput.value) || 0; // НОВИЙ
                 
                 const dcResult = dcCollected * this.coefficients.dcCollected;
                 const storeResult = storeCollected * this.coefficients.storeCollected;
                 const movedResult = dcMoved * this.coefficients.dcMoved;
                 const placedResult = placed * this.coefficients.placed;
+                const weightResult = weightPlacement * this.coefficients.weightPlacement; // НОВИЙ
+                const packingResult = packingOrder * this.coefficients.packingOrder; // НОВИЙ
                 
-                const total = dcResult + storeResult + movedResult + placedResult;
+                const total = dcResult + storeResult + movedResult + placedResult + weightResult + packingResult; // ОНОВЛЕНО
                 
-                // Отримуємо дані про робочий час
+                // Бонуси
+                const rating = parseFloat(this.averageRating.value);
+                const accuracy = parseFloat(this.pickingAccuracy.value);
+                
+                let bonusMultiplier = 1;
+                if (rating >= 4.8) bonusMultiplier *= this.bonusCoefficients.rating;
+                if (accuracy >= 96) bonusMultiplier *= this.bonusCoefficients.accuracy;
+                
+                const totalWithBonuses = total * bonusMultiplier;
+                
+                // Робочий час
                 const workTimeStart = document.getElementById('work-time-start').value;
                 const workTimeEnd = document.getElementById('work-time-end').value;
                 
-                // Розраховуємо загальний час роботи
                 let workTimeTotal = 0;
                 if (workTimeStart && workTimeEnd) {
                     const startParts = workTimeStart.split(':');
@@ -965,12 +1258,11 @@
                     const endDate = new Date();
                     endDate.setHours(parseInt(endParts[0]), parseInt(endParts[1]), 0);
                     
-                    // Якщо кінцевий час менший за початковий, додаємо 1 день
                     if (endDate < startDate) {
                         endDate.setDate(endDate.getDate() + 1);
                     }
                     
-                    workTimeTotal = (endDate - startDate) / (1000 * 60); // в хвилинах
+                    workTimeTotal = (endDate - startDate) / (1000 * 60);
                 }
                 
                 const data = {
@@ -979,7 +1271,13 @@
                     storeCollected: storeCollected,
                     dcMoved: dcMoved,
                     placed: placed,
+                    weightPlacement: weightPlacement, // НОВИЙ
+                    packingOrder: packingOrder, // НОВИЙ
                     total: total,
+                    totalWithBonuses: totalWithBonuses,
+                    rating: rating,
+                    accuracy: accuracy,
+                    bonusMultiplier: bonusMultiplier,
                     workTimeStart: workTimeStart,
                     workTimeEnd: workTimeEnd,
                     workTimeTotal: workTimeTotal
@@ -1018,17 +1316,30 @@
                 const storeCollected = Math.min(parseFloat(document.getElementById('manual-store-collected').value) || 0, 9999999);
                 const dcMoved = Math.min(parseFloat(document.getElementById('manual-dc-moved').value) || 0, 9999999);
                 const placed = Math.min(parseFloat(document.getElementById('manual-placed').value) || 0, 9999999);
+                const weightPlacement = Math.min(parseFloat(document.getElementById('manual-weight-placement').value) || 0, 9999999); // НОВИЙ
+                const packingOrder = Math.min(parseFloat(document.getElementById('manual-packing-order').value) || 0, 9999999); // НОВИЙ
                 
                 const total = (dcCollected * this.coefficients.dcCollected) +
                              (storeCollected * this.coefficients.storeCollected) +
                              (dcMoved * this.coefficients.dcMoved) +
-                             (placed * this.coefficients.placed);
+                             (placed * this.coefficients.placed) +
+                             (weightPlacement * this.coefficients.weightPlacement) + // НОВИЙ
+                             (packingOrder * this.coefficients.packingOrder); // НОВИЙ
                 
-                // Отримуємо дані про робочий час
+                // Отримуємо дані про бонуси
+                const rating = parseFloat(document.getElementById('manual-rating').value) || 4.0;
+                const accuracy = parseFloat(document.getElementById('manual-accuracy').value) || 95;
+                
+                let bonusMultiplier = 1;
+                if (rating >= 4.8) bonusMultiplier *= this.bonusCoefficients.rating;
+                if (accuracy >= 96) bonusMultiplier *= this.bonusCoefficients.accuracy;
+                
+                const totalWithBonuses = total * bonusMultiplier;
+                
+                // Робочий час
                 const workTimeStart = document.getElementById('manual-work-time-start').value;
                 const workTimeEnd = document.getElementById('manual-work-time-end').value;
                 
-                // Розраховуємо загальний час роботи
                 let workTimeTotal = 0;
                 if (workTimeStart && workTimeEnd) {
                     const startParts = workTimeStart.split(':');
@@ -1040,12 +1351,11 @@
                     const endDate = new Date();
                     endDate.setHours(parseInt(endParts[0]), parseInt(endParts[1]), 0);
                     
-                    // Якщо кінцевий час менший за початковий, додаємо 1 день
                     if (endDate < startDate) {
                         endDate.setDate(endDate.getDate() + 1);
                     }
                     
-                    workTimeTotal = (endDate - startDate) / (1000 * 60); // в хвилинах
+                    workTimeTotal = (endDate - startDate) / (1000 * 60);
                 }
                 
                 const data = {
@@ -1054,7 +1364,13 @@
                     storeCollected: storeCollected,
                     dcMoved: dcMoved,
                     placed: placed,
+                    weightPlacement: weightPlacement, // НОВИЙ
+                    packingOrder: packingOrder, // НОВИЙ
                     total: total,
+                    totalWithBonuses: totalWithBonuses,
+                    rating: rating,
+                    accuracy: accuracy,
+                    bonusMultiplier: bonusMultiplier,
                     workTimeStart: workTimeStart,
                     workTimeEnd: workTimeEnd,
                     workTimeTotal: workTimeTotal
@@ -1094,24 +1410,35 @@
                 
                 if (savedData[today]) {
                     const data = savedData[today];
-                    // Завантажуємо дані тільки якщо вони є
                     this.dcCollectedInput.value = data.dcCollected || '';
                     this.storeCollectedInput.value = data.storeCollected || '';
                     this.dcMovedInput.value = data.dcMoved || '';
                     this.placedInput.value = data.placed || '';
+                    this.weightPlacementInput.value = data.weightPlacement || ''; // НОВИЙ
+                    this.packingOrderInput.value = data.packingOrder || ''; // НОВИЙ
                     
-                    // Завантажуємо робочий час
+                    // Завантажуємо оцінку і точність
+                    if (data.rating) {
+                        this.averageRating.value = data.rating;
+                        this.ratingValue.textContent = parseFloat(data.rating).toFixed(1);
+                    }
+                    if (data.accuracy) {
+                        this.pickingAccuracy.value = data.accuracy;
+                        this.accuracyValue.textContent = parseFloat(data.accuracy).toFixed(1) + '%';
+                    }
+                    
                     document.getElementById('work-time-start').value = data.workTimeStart || '';
                     document.getElementById('work-time-end').value = data.workTimeEnd || '';
                     
-                    // Оновлюємо відображення загального часу
                     this.updateWorkTimeTotal();
+                    this.updateBonusDisplay();
                 } else {
-                    // Встановлюємо пусті значення
                     this.dcCollectedInput.value = '';
                     this.storeCollectedInput.value = '';
                     this.dcMovedInput.value = '';
                     this.placedInput.value = '';
+                    this.weightPlacementInput.value = ''; // НОВИЙ
+                    this.packingOrderInput.value = ''; // НОВИЙ
                     
                     document.getElementById('work-time-start').value = '';
                     document.getElementById('work-time-end').value = '';
@@ -1134,7 +1461,6 @@
                 
                 document.getElementById('total-days').textContent = filteredData.length;
                 
-                // Рахуємо загальну кількість годин
                 let totalWorkMinutes = 0;
                 filteredData.forEach(item => {
                     totalWorkMinutes += item.workTimeTotal || 0;
@@ -1144,13 +1470,13 @@
                 const totalMinutes = Math.floor(totalWorkMinutes % 60);
                 document.getElementById('total-hours').textContent = `${totalHours} год ${totalMinutes} хв`;
                 
-                const periodTotal = filteredData.reduce((sum, item) => sum + item.total, 0);
+                // Використовуємо totalWithBonuses якщо є, інакше total
+                const periodTotal = filteredData.reduce((sum, item) => sum + (item.totalWithBonuses || item.total || 0), 0);
                 
-                // Форматуємо великі числа для відображення у статистиці
                 if (Math.abs(periodTotal) > 999999) {
                     document.getElementById('period-total').textContent = periodTotal.toExponential(2);
                 } else {
-                this.animateNumberChange(document.getElementById('period-total'), periodTotal);
+                    this.animateNumberChange(document.getElementById('period-total'), periodTotal);
                 }
                 
                 this.updateChart(filteredData);
@@ -1159,24 +1485,16 @@
             updateChart(data) {
                 try {
                     const chartCanvas = document.getElementById('statsChart');
-                    if (!chartCanvas) {
-                        console.error("Елемент canvas з id='statsChart' не знайдено");
-                        return;
-                    }
+                    if (!chartCanvas) return;
 
-                    // Агресивне очищення попереднього графіка
                     if (this.chart) {
                         this.chart.destroy();
                         this.chart = null;
-                        // Спробуємо також очистити контекст canvas
                         const ctx = chartCanvas.getContext('2d');
                         ctx.clearRect(0, 0, chartCanvas.width, chartCanvas.height);
-                        console.log("Попередній графік знищено та canvas очищено.");
                     }
                     
                     if (!data || data.length === 0) {
-                        console.log("Немає даних для відображення діаграми. Графік не буде створено.");
-                        // Додатково переконуємося, що canvas порожній, якщо дані відсутні
                         const ctx = chartCanvas.getContext('2d');
                         ctx.clearRect(0, 0, chartCanvas.width, chartCanvas.height);
                         return;
@@ -1185,7 +1503,6 @@
                     const ctx = chartCanvas.getContext('2d');
                     const sortedData = data.sort((a, b) => new Date(a.date) - new Date(b.date));
                     
-                    // Невелика затримка перед створенням нового графіка, щоб дати браузеру час обробити знищення старого
                     setTimeout(() => {
                         this.chart = new Chart(ctx, {
                             type: 'line',
@@ -1196,7 +1513,7 @@
                                 }),
                                 datasets: [{
                                     label: 'Загальний результат',
-                                    data: sortedData.map(item => item.total),
+                                    data: sortedData.map(item => item.totalWithBonuses || item.total || 0),
                                     borderColor: '#10b981',
                                     backgroundColor: 'rgba(16, 185, 129, 0.1)',
                                     borderWidth: 3,
@@ -1211,10 +1528,10 @@
                             },
                             options: {
                                 responsive: true,
-                                maintainAspectRatio: false, // Додано для кращої адаптивності
+                                maintainAspectRatio: false,
                                 animation: {
-                                    duration: 800, // Трохи зменшено для швидкості
-                                    easing: 'easeInOutCubic' // Змінено тип анімації
+                                    duration: 800,
+                                    easing: 'easeInOutCubic'
                                 },
                                 plugins: {
                                     legend: {
@@ -1253,11 +1570,10 @@
                                 }
                             }
                         });
-                        console.log("Новий графік створено з даними:", sortedData);
-                    }, 50); // Затримка 50 мс
+                    }, 50);
 
                 } catch (error) {
-                    console.error("Помилка при оновленні/створенні діаграми:", error);
+                    console.error("Помилка при оновленні діаграми:", error);
                 }
             }
 
@@ -1270,7 +1586,6 @@
                     this.dateTo.value = dates[dates.length - 1];
                     this.updateStatistics();
                     
-                    // Animate the date inputs
                     [this.dateFrom, this.dateTo].forEach(input => {
                         input.style.transform = 'scale(1.05)';
                         input.style.borderColor = '#3b82f6';
@@ -1288,19 +1603,27 @@
                 const month = (now.getMonth() + 1).toString().padStart(2, '0');
                 const day = now.getDate().toString().padStart(2, '0');
                 document.getElementById('manual-date').value = `${year}-${month}-${day}`;
+                
+                // Встановлюємо значення за замовчуванням для оцінки та точності
+                document.getElementById('manual-rating').value = '4.0';
+                document.getElementById('manual-accuracy').value = '95';
+                
                 this.manualModal.classList.remove('hidden');
             }
 
             hideManualModal() {
                 this.manualModal.classList.add('hidden');
-                // Reset form - встановлюємо порожні рядки замість нулів для числових полів
                 document.getElementById('manual-dc-collected').value = '';
                 document.getElementById('manual-store-collected').value = '';
                 document.getElementById('manual-dc-moved').value = '';
                 document.getElementById('manual-placed').value = '';
+                document.getElementById('manual-weight-placement').value = ''; // НОВИЙ
+                document.getElementById('manual-packing-order').value = ''; // НОВИЙ
                 document.getElementById('manual-work-time-start').value = '';
                 document.getElementById('manual-work-time-end').value = '';
                 document.getElementById('manual-work-time-total').textContent = '0 год 0 хв';
+                document.getElementById('manual-rating').value = '4.0';
+                document.getElementById('manual-accuracy').value = '95';
             }
 
             showClearModal() {
@@ -1315,7 +1638,6 @@
                 const currentMonth = new Date().toISOString().slice(0, 7);
                 const savedData = JSON.parse(localStorage.getItem('warehouseData') || '{}');
                 
-                // Filter current month data
                 const currentMonthData = {};
                 const remainingData = {};
                 
@@ -1328,12 +1650,11 @@
                 });
                 
                 if (saveToArchive && Object.keys(currentMonthData).length > 0) {
-                    // Save to monthly archive
                     let monthlyArchives = JSON.parse(localStorage.getItem('monthlyArchives') || '{}');
                     const dates = Object.keys(currentMonthData).sort();
                     const firstDate = dates[0];
                     const lastDate = dates[dates.length - 1];
-                    const total = Object.values(currentMonthData).reduce((sum, item) => sum + item.total, 0);
+                    const total = Object.values(currentMonthData).reduce((sum, item) => sum + (item.totalWithBonuses || item.total || 0), 0);
                     
                     monthlyArchives[currentMonth] = {
                         period: `${firstDate} - ${lastDate}`,
@@ -1345,14 +1666,13 @@
                     localStorage.setItem('monthlyArchives', JSON.stringify(monthlyArchives));
                 }
                 
-                // Clear current month data
                 localStorage.setItem('warehouseData', JSON.stringify(remainingData));
                 
-                // Reset current inputs with animation
-                [this.dcCollectedInput, this.storeCollectedInput, this.dcMovedInput, this.placedInput].forEach(input => {
-                    if (input) { // Додаємо перевірку на існування інпута
+                [this.dcCollectedInput, this.storeCollectedInput, this.dcMovedInput, 
+                 this.placedInput, this.weightPlacementInput, this.packingOrderInput].forEach(input => {
+                    if (input) {
                         input.style.transform = 'scale(0.9)';
-                        input.value = '';  // Встановлюємо порожній рядок замість 0
+                        input.value = '';
                         setTimeout(() => {
                             input.style.transform = '';
                         }, 200);
@@ -1360,27 +1680,21 @@
                 });
                 
                 this.hideClearModal();
-                this.updateCalculations(); // Оновлюємо розрахунки в полях вводу
-                this.updateStatistics();   // Оновлюємо статистику (дні, суми), це також викличе updateChart
-                this.loadMonthlyArchives(); // Перезавантажуємо список архівів
-                this.updateChart([]);       // ЯВНО очищаємо графік, передаючи порожній масив даних
+                this.updateCalculations();
+                this.updateStatistics();
+                this.loadMonthlyArchives();
+                this.updateChart([]);
                 
                 this.showSuccessAnimation();
             }
 
             loadMonthlyArchives() {
                 try {
-                    // Перевіряємо, чи існує елемент контейнера
                     const container = document.getElementById('monthly-archives');
-                    if (!container) {
-                        console.error("Елемент з id='monthly-archives' не знайдено!");
-                        return;
-                    }
+                    if (!container) return;
                     
-                    // Очищаємо контейнер
                     container.innerHTML = '';
                     
-                    // Отримуємо дані з localStorage
                     let monthlyArchives = {};
                     try {
                         const archivesData = localStorage.getItem('monthlyArchives');
@@ -1397,21 +1711,16 @@
                         return;
                     }
                     
-                    // Отримуємо поточний місяць
                     const currentMonth = new Date().toISOString().slice(0, 7);
-                    
-                    // Фільтруємо архіви, щоб показувати тільки поточний місяць
                     const currentMonthArchives = {};
                     
                     Object.keys(monthlyArchives).forEach(key => {
-                        // Перевіряємо, чи архів належить до поточного місяця
                         if (key.startsWith(currentMonth) || 
                             ((key.includes('-first') || key.includes('-second')) && key.startsWith(currentMonth.slice(0, 7)))) {
                             currentMonthArchives[key] = monthlyArchives[key];
                         }
                     });
                     
-                    // Перевіряємо, чи є архіви поточного місяця
                     const archiveKeys = Object.keys(currentMonthArchives);
                     
                     if (archiveKeys.length === 0) {
@@ -1419,12 +1728,10 @@
                         return;
                     }
                     
-                    // Відображаємо архіви поточного місяця
                     archiveKeys.sort().reverse().forEach((archiveKey, index) => {
                         try {
                             const archive = currentMonthArchives[archiveKey];
                             
-                            // Перевіряємо, чи є архів дійсним об'єктом
                             if (!archive || typeof archive !== 'object') {
                                 return;
                             }
@@ -1433,7 +1740,6 @@
                             div.className = 'archive-item bg-white bg-opacity-10 rounded-xl p-4 cursor-pointer transition-all duration-300 hover:bg-opacity-20';
                             div.style.animationDelay = `${index * 0.1}s`;
                             
-                            // Форматуємо великі числа для відображення в списку архівів
                             let formattedTotal = "0.00";
                             
                             if (typeof archive.total !== 'undefined') {
@@ -1444,16 +1750,13 @@
                                 }
                             }
                             
-                            // Визначаємо заголовок архіву з урахуванням половини місяця
                             let archiveTitle = '';
                             let periodText = archive.period || '';
                             let daysCount = archive.daysCount || '0';
                             
                             if (archive.halfType && archive.monthName) {
-                                // Новий формат з половиною місяця
                                 archiveTitle = `${archive.halfType} ${archive.monthName}`;
                             } else {
-                                // Старий формат для сумісності зі старими архівами
                                 const [year, month] = archiveKey.split('-');
                                 if (year && month) {
                                     const monthNames = ['Січень', 'Лютий', 'Березень', 'Квітень', 'Травень', 'Червень', 'Липень', 'Серпень', 'Вересень', 'Жовтень', 'Листопад', 'Грудень'];
@@ -1485,8 +1788,6 @@
                             `;
                             
                             div.addEventListener('click', () => {
-                                // Тут потрібно модифікувати перехід на сторінку деталей, щоб враховувати нову структуру ключа
-                                // Використовуємо original_month, щоб зберегти сумісність зі старим форматом
                                 let original_month = archiveKey;
                                 if (archiveKey.includes('-first') || archiveKey.includes('-second')) {
                                     original_month = archiveKey.split('-').slice(0, 2).join('-');
@@ -1509,219 +1810,6 @@
                 }
             }
 
-            showMonthHalfSelector(currentMonthData, currentMonth, monthName) {
-                const modalId = 'month-half-selector-modal'; // Унікальний ID
-                let modal = document.getElementById(modalId);
-                if (modal) modal.remove(); // Видаляємо попереднє модальне вікно, якщо існує
-
-                modal = document.createElement('div');
-                modal.id = modalId;
-                modal.className = 'fixed inset-0 modal-backdrop flex items-center justify-center p-4 z-50';
-                modal.innerHTML = `
-                    <div class="glass-effect rounded-2xl p-8 w-full max-w-md modal-content">
-                        <h3 class="text-2xl font-bold text-white mb-4 flex items-center">
-                            <i class="fas fa-calendar-alt mr-3 text-blue-400"></i>
-                            Яка це половина місяця?
-                        </h3>
-                        
-                        <p class="text-blue-200 mb-6 text-lg">Оберіть, до якої половини місяця відносяться дані:</p>
-                        
-                        <div class="space-y-4">
-                            <button id="first-half-btn" class="w-full btn-primary bg-green-600 hover:bg-green-700 text-white font-bold py-4 px-6 rounded-xl text-lg relative overflow-hidden">
-                                <i class="fas fa-calendar-day mr-3"></i>
-                                Перша половина ${monthName}
-                            </button>
-                            
-                            <button id="second-half-btn" class="w-full btn-primary bg-purple-600 hover:bg-purple-700 text-white font-bold py-4 px-6 rounded-xl text-lg relative overflow-hidden">
-                                <i class="fas fa-calendar-week mr-3"></i>
-                                Друга половина ${monthName}
-                            </button>
-                            
-                            <button id="cancel-half-btn" class="w-full bg-gray-600 hover:bg-gray-700 text-white font-bold py-3 px-4 rounded-lg transition duration-200">
-                                Скасувати
-                        </button>
-                        </div>
-                    </div>
-                `;
-                
-                document.body.appendChild(modal);
-                
-                // Обробник для кнопки "Скасувати"
-                document.getElementById('cancel-half-btn').addEventListener('click', () => {
-                    modal.remove();
-                });
-                
-                // Обробник для кнопки "Перша половина"
-                document.getElementById('first-half-btn').addEventListener('click', () => {
-                    this.saveArchiveWithHalf(currentMonthData, currentMonth, monthName, 'Перша половина');
-                    modal.remove();
-                });
-                
-                // Обробник для кнопки "Друга половина"
-                document.getElementById('second-half-btn').addEventListener('click', () => {
-                    this.saveArchiveWithHalf(currentMonthData, currentMonth, monthName, 'Друга половина');
-                    modal.remove();
-                });
-            }
-
-            saveArchiveWithHalf(currentMonthData, currentMonth, monthName, halfType) {
-                let monthlyArchives = JSON.parse(localStorage.getItem('monthlyArchives') || '{}');
-                const archiveKey = `${currentMonth}-${halfType === 'Перша половина' ? 'first' : 'second'}`;
-
-                if (monthlyArchives[archiveKey]) {
-                    // Архів вже існує, показуємо вікно підтвердження перезапису
-                    this.showOverwriteConfirmationModal(monthlyArchives[archiveKey], currentMonthData, archiveKey, monthName, halfType, currentMonth);
-                } else {
-                    // Архіву немає, просто зберігаємо
-                    this._performActualSave(currentMonthData, archiveKey, monthName, halfType, currentMonth);
-                }
-            }
-
-            _performActualSave(dataToSave, archiveKey, monthName, halfType, currentMonth) {
-                let monthlyArchives = JSON.parse(localStorage.getItem('monthlyArchives') || '{}');
-                const dates = Object.keys(dataToSave).sort();
-                const firstDate = dates.length > 0 ? dates[0] : currentMonth + '-01'; //Fallback if no data
-                const lastDate = dates.length > 0 ? dates[dates.length - 1] : currentMonth + '-28'; //Fallback
-                const total = Object.values(dataToSave).reduce((sum, item) => sum + (item.total || 0), 0);
-
-                monthlyArchives[archiveKey] = {
-                    period: `${firstDate} - ${lastDate}`,
-                    data: dataToSave,
-                    total: total,
-                    daysCount: dates.length,
-                    monthName: monthName,
-                    halfType: halfType
-                };
-                
-                localStorage.setItem('monthlyArchives', JSON.stringify(monthlyArchives));
-                this.loadMonthlyArchives();
-                this.showSuccessMessage(`Дані успішно збережено в архів (${halfType} ${monthName})`);
-            }
-
-            showOverwriteConfirmationModal(existingArchiveData, newData, archiveKey, monthName, halfType, currentMonth) {
-                const modalId = 'overwrite-archive-confirmation-modal';
-                let modal = document.getElementById(modalId);
-                if (modal) modal.remove();
-
-                modal = document.createElement('div');
-                modal.id = modalId;
-                // Збільшено z-index, щоб перекривати інші модальні вікна, якщо вони раптом активні
-                modal.className = 'fixed inset-0 modal-backdrop flex items-center justify-center p-4 z-[60]'; 
-                
-                let diffHtml = '<div class="space-y-3 max-h-72 overflow-y-auto p-1 bg-gray-700 bg-opacity-20 rounded-lg">';
-                const existingDataEntries = existingArchiveData.data || {};
-                const newDataEntries = newData || {};
-                const allDates = [...new Set([...Object.keys(existingDataEntries), ...Object.keys(newDataEntries)])].sort();
-
-                let changesSummary = { added: 0, removed: 0, modified: 0 };
-
-                if (allDates.length === 0) {
-                    diffHtml += '<p class="text-center text-yellow-300 py-4">Немає даних для порівняння.</p>';
-                } else {
-                    allDates.forEach(date => {
-                        const oldEntry = existingDataEntries[date];
-                        const newEntry = newDataEntries[date];
-                        
-                        let entryCardHtml = `<div class="p-3 rounded-md shadow-md text-sm ">
-                                               <strong class="block text-base font-semibold mb-1.5 text-white">${date}</strong>`;
-
-                        if (oldEntry && !newEntry) {
-                            changesSummary.removed++;
-                            entryCardHtml += `<div class="border-l-4 border-red-500 pl-2 py-1 bg-red-500 bg-opacity-10">
-                                                <p class="text-red-300 font-medium"><i class="fas fa-trash-alt mr-1.5"></i>Запис буде видалено</p>
-                                                <p class="text-gray-300 text-xs">ДС: ${oldEntry.dcCollected || 0}, Маг: ${oldEntry.storeCollected || 0}, Пер: ${oldEntry.dcMoved || 0}, Роз: ${oldEntry.placed || 0} <span class="font-semibold">(Разом: ${oldEntry.total !== undefined ? oldEntry.total.toFixed(2) : 'N/A'})</span></p>
-                                              </div>`;
-                        } else if (!oldEntry && newEntry) {
-                            changesSummary.added++;
-                            entryCardHtml += `<div class="border-l-4 border-green-500 pl-2 py-1 bg-green-500 bg-opacity-10">
-                                                <p class="text-green-300 font-medium"><i class="fas fa-plus-circle mr-1.5"></i>Новий запис</p>
-                                                <p class="text-gray-300 text-xs">ДС: ${newEntry.dcCollected || 0}, Маг: ${newEntry.storeCollected || 0}, Пер: ${newEntry.dcMoved || 0}, Роз: ${newEntry.placed || 0} <span class="font-semibold">(Разом: ${newEntry.total !== undefined ? newEntry.total.toFixed(2) : 'N/A'})</span></p>
-                                              </div>`;
-                        } else if (oldEntry && newEntry) {
-                            const fields = [
-                                { key: 'dcCollected', name: 'Зібрано ДС' },
-                                { key: 'storeCollected', name: 'Зібрано Магазин' },
-                                { key: 'dcMoved', name: 'Переміщено ДС' },
-                                { key: 'placed', name: 'Розміщено' },
-                                { key: 'total', name: 'Загальний результат' }
-                            ];
-                            let fieldChangesHtml = '';
-                            let hasChangesThisEntry = false;
-
-                            fields.forEach(field => {
-                                const oldValue = oldEntry[field.key] !== undefined ? (field.key === 'total' ? parseFloat(oldEntry[field.key]).toFixed(2) : oldEntry[field.key]) : '0';
-                                const newValue = newEntry[field.key] !== undefined ? (field.key === 'total' ? parseFloat(newEntry[field.key]).toFixed(2) : newEntry[field.key]) : '0';
-                                
-                                if (String(oldValue) !== String(newValue)) {
-                                    hasChangesThisEntry = true;
-                                    fieldChangesHtml += `<p class="text-gray-300"><span class="font-medium text-gray-400">${field.name}:</span> <span class="text-red-400">${oldValue}</span> <i class="fas fa-arrow-right text-xs text-gray-500 mx-1"></i> <span class="text-green-400">${newValue}</span></p>`;
-                                } else {
-                                    // Можна відображати і незмінені поля, якщо потрібно
-                                    // fieldChangesHtml += `<p class="text-gray-400"><span class="font-medium">${field.name}:</span> ${newValue}</p>`;
-                                }
-                            });
-                            
-                            if (hasChangesThisEntry) {
-                                changesSummary.modified++;
-                                entryCardHtml += `<div class="border-l-4 border-yellow-500 pl-2 py-1 bg-yellow-500 bg-opacity-10">
-                                                    <p class="text-yellow-300 font-medium mb-1"><i class="fas fa-edit mr-1.5"></i>Змінено запис:</p>
-                                                    <div class="space-y-0.5 text-xs">${fieldChangesHtml}</div>
-                                                  </div>`;
-                            } else {
-                                // Якщо змін немає, можна або нічого не показувати для цієї дати, або показати як "без змін"
-                                 entryCardHtml += `<div class="border-l-4 border-gray-600 pl-2 py-1 bg-gray-500 bg-opacity-10">
-                                                    <p class="text-gray-400 font-medium"><i class="fas fa-check-circle mr-1.5"></i>Без змін</p>
-                                                 </div>`;
-                            }
-                        }
-                        entryCardHtml += '</div>'; // Кінець div для запису
-                        diffHtml += entryCardHtml;
-                    });
-                }
-                diffHtml += '</div>'; // Кінець контейнера для списку змін
-
-                let summaryText = '';
-                if (changesSummary.added > 0) summaryText += `<span class="text-green-300">Додано: ${changesSummary.added}</span>; `;
-                if (changesSummary.modified > 0) summaryText += `<span class="text-yellow-300">Змінено: ${changesSummary.modified}</span>; `;
-                if (changesSummary.removed > 0) summaryText += `<span class="text-red-300">Видалено: ${changesSummary.removed}</span>; `;
-                if (summaryText === '') summaryText = 'Змін не виявлено.';
-                 else summaryText = summaryText.slice(0, -2); // remove last semicolon and space
-
-
-                modal.innerHTML = `
-                    <div class="glass-effect rounded-xl p-5 sm:p-7 w-full max-w-xl modal-content shadow-2xl">
-                        <h3 class="text-xl sm:text-2xl font-bold text-white mb-3 sm:mb-4 flex items-center">
-                            <i class="fas fa-exclamation-triangle mr-2 sm:mr-3 text-yellow-400"></i>
-                            Підтвердження перезапису архіву
-                        </h3>
-                        <p class="text-blue-200 mb-2 text-sm sm:text-base">Архів для <strong class="text-white font-semibold">${halfType} ${monthName}</strong> вже існує.</p>
-                        <p class="text-blue-200 mb-3 sm:mb-4 text-sm sm:text-base">Загалом змін: ${summaryText}</p>
-                        <p class="text-blue-100 mb-2 text-xs font-medium">Деталі змін:</p>
-                        ${diffHtml} 
-                        <p class="text-blue-200 mt-4 sm:mt-5 text-sm sm:text-base">Ви дійсно хочете замінити існуючі дані новими?</p>
-                        <div class="mt-5 sm:mt-6 grid grid-cols-2 gap-3 sm:gap-4">
-                            <button id="cancel-overwrite-btn" class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2.5 px-4 rounded-lg transition duration-200 text-xs sm:text-sm">
-                                <i class="fas fa-times mr-1.5"></i>Скасувати
-                            </button>
-                            <button id="confirm-overwrite-btn" class="btn-primary btn-danger text-white font-bold py-2.5 px-4 rounded-lg relative overflow-hidden text-xs sm:text-sm">
-                                <i class="fas fa-save mr-1.5"></i>Замінити
-                            </button>
-                        </div>
-                    </div>
-                `;
-                document.body.appendChild(modal);
-
-                document.getElementById('cancel-overwrite-btn').addEventListener('click', () => {
-                    modal.remove();
-                });
-
-                document.getElementById('confirm-overwrite-btn').addEventListener('click', () => {
-                    modal.remove();
-                    this._performActualSave(newData, archiveKey, monthName, halfType, currentMonth);
-                });
-            }
-
-            // Додаємо метод для показу повідомлення про успіх (може вже існувати)
             showSuccessMessage(message) {
                 const successMessage = document.createElement('div');
                 successMessage.className = 'fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50';
@@ -1736,12 +1824,10 @@
                 }, 3000);
             }
 
-            // Оновлюємо метод для збереження даних в архів з вибором половини місяця
             saveToArchive() {
                 const currentMonth = new Date().toISOString().slice(0, 7);
                 const savedData = JSON.parse(localStorage.getItem('warehouseData') || '{}');
                 
-                // Фільтруємо дані поточного місяця
                 const currentMonthData = {};
                 
                 Object.keys(savedData).forEach(date => {
@@ -1755,56 +1841,29 @@
                     return;
                 }
                 
-                // Отримуємо поточний місяць і рік для відображення
                 const [year, monthNum] = currentMonth.split('-');
                 const monthNames = ['Січень', 'Лютий', 'Березень', 'Квітень', 'Травень', 'Червень', 'Липень', 'Серпень', 'Вересень', 'Жовтень', 'Листопад', 'Грудень'];
                 const monthName = monthNames[parseInt(monthNum) - 1];
                 
-                // Створюємо модальне вікно підтвердження
-                const modalId = 'archive-confirmation-modal'; // Унікальний ID
-                let modal = document.getElementById(modalId);
-                if (modal) modal.remove(); // Видаляємо попереднє модальне вікно, якщо існує
-
-                modal = document.createElement('div');
-                modal.id = modalId;
-                modal.className = 'fixed inset-0 modal-backdrop flex items-center justify-center p-4 z-50';
-                modal.innerHTML = `
-                    <div class="glass-effect rounded-2xl p-8 w-full max-w-md modal-content">
-                        <h3 class="text-2xl font-bold text-white mb-4 flex items-center">
-                            <i class="fas fa-archive mr-3 text-blue-400"></i>
-                            Зберегти в архів
-                        </h3>
-                        
-                        <p class="text-blue-200 mb-6 text-lg">Ви бажаєте зберегти дані за поточний місяць у архів? Дані залишаться доступними для редагування.</p>
-                        
-                        <div class="grid grid-cols-2 gap-4">
-                            <button id="archive-cancel-btn" class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-3 px-4 rounded-lg transition duration-200">
-                                Скасувати
-                            </button>
-                            <button id="archive-confirm-btn" class="btn-primary bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg relative overflow-hidden">
-                                Зберегти
-                            </button>
-                        </div>
-                    </div>
-                `;
+                // Для простоти зберігаємо без вибору половини місяця
+                let monthlyArchives = JSON.parse(localStorage.getItem('monthlyArchives') || '{}');
+                const dates = Object.keys(currentMonthData).sort();
+                const firstDate = dates[0];
+                const lastDate = dates[dates.length - 1];
+                const total = Object.values(currentMonthData).reduce((sum, item) => sum + (item.totalWithBonuses || item.total || 0), 0);
                 
-                document.body.appendChild(modal);
+                monthlyArchives[currentMonth] = {
+                    period: `${firstDate} - ${lastDate}`,
+                    data: currentMonthData,
+                    total: total,
+                    daysCount: dates.length
+                };
                 
-                // Додаємо обробники подій для кнопок
-                document.getElementById('archive-cancel-btn').addEventListener('click', () => {
-                    modal.remove();
-                });
-                
-                document.getElementById('archive-confirm-btn').addEventListener('click', () => {
-                    // Закриваємо перше модальне вікно
-                    modal.remove();
-                    
-                    // Показуємо діалогове вікно для вибору половини місяця
-                    this.showMonthHalfSelector(currentMonthData, currentMonth, monthName);
-                });
+                localStorage.setItem('monthlyArchives', JSON.stringify(monthlyArchives));
+                this.loadMonthlyArchives();
+                this.showSuccessAnimation();
             }
 
-            // Новий метод для оновлення загального часу роботи
             updateWorkTimeTotal() {
                 const workTimeStart = document.getElementById('work-time-start').value;
                 const workTimeEnd = document.getElementById('work-time-end').value;
@@ -1820,7 +1879,6 @@
                     const endDate = new Date();
                     endDate.setHours(parseInt(endParts[0]), parseInt(endParts[1]), 0);
                     
-                    // Якщо кінцевий час менший за початковий, додаємо 1 день
                     if (endDate < startDate) {
                         endDate.setDate(endDate.getDate() + 1);
                     }
@@ -1835,7 +1893,6 @@
                 }
             }
 
-            // Додаємо метод для оновлення часу роботи в модальному вікні
             updateManualWorkTimeTotal() {
                 const workTimeStart = document.getElementById('manual-work-time-start').value;
                 const workTimeEnd = document.getElementById('manual-work-time-end').value;
@@ -1851,7 +1908,6 @@
                     const endDate = new Date();
                     endDate.setHours(parseInt(endParts[0]), parseInt(endParts[1]), 0);
                     
-                    // Якщо кінцевий час менший за початковий, додаємо 1 день
                     if (endDate < startDate) {
                         endDate.setDate(endDate.getDate() + 1);
                     }
@@ -1866,7 +1922,6 @@
                 }
             }
 
-            // Додаємо метод для валідації полів часу
             validateTimeInput(input) {
                 if (!input.value) return;
                 
@@ -1876,21 +1931,15 @@
                 let hours = parseInt(timeParts[0]);
                 let minutes = parseInt(timeParts[1]);
                 
-                // Обмежуємо години до 23
                 if (hours > 23) hours = 23;
-                
-                // Обмежуємо хвилини до 59
                 if (minutes > 59) minutes = 59;
                 
-                // Форматуємо значення з ведучими нулями
                 const formattedHours = hours.toString().padStart(2, '0');
                 const formattedMinutes = minutes.toString().padStart(2, '0');
                 
-                // Встановлюємо валідоване значення
                 input.value = `${formattedHours}:${formattedMinutes}`;
             }
 
-            // Метод для підтвердження видалення всіх архівів
             confirmDeleteAllArchives() {
                 const modalId = 'delete-all-archives-confirmation-modal';
                 let modal = document.getElementById(modalId);
@@ -1929,28 +1978,27 @@
                 });
             }
 
-            // Метод для видалення всіх архівів
             deleteAllArchives() {
                 localStorage.removeItem('monthlyArchives');
-                this.loadMonthlyArchives(); // Оновлюємо список архівів на сторінці
+                this.loadMonthlyArchives();
                 this.showSuccessMessage('Всі архіви успішно видалено!');
             }
 
-            // Метод для очищення полів вводу
             clearInputFields() {
                 const inputsToClear = [
                     this.dcCollectedInput,
                     this.storeCollectedInput,
                     this.dcMovedInput,
                     this.placedInput,
+                    this.weightPlacementInput, // НОВИЙ
+                    this.packingOrderInput, // НОВИЙ
                     document.getElementById('work-time-start'),
                     document.getElementById('work-time-end')
                 ];
 
                 inputsToClear.forEach(input => {
                     if (input) {
-                        input.value = ''; // Очищаємо значення
-                        // Плавна анімація очищення
+                        input.value = '';
                         if (input.classList.contains('input-glow')) {
                             input.style.transform = 'scale(0.95)';
                             input.style.opacity = '0.7';
@@ -1962,44 +2010,34 @@
                     }
                 });
 
-                // Оновлюємо розрахунки та загальний час роботи
                 this.updateCalculations();
                 this.updateWorkTimeTotal();
-                // this.updateChart([]); // Прибираємо очищення графіка звідси
                 
-                // Фокусуємося на першому полі для зручності
                 if (this.dcCollectedInput) {
                     this.dcCollectedInput.focus();
                 }
-
-                // Можна додати повідомлення про успішне очищення, якщо потрібно
-                // this.showSuccessMessage('Поля вводу очищено!'); 
             }
         }
 
         // Initialize the application
         document.addEventListener('DOMContentLoaded', function() {
             try {
-                // Перевіряємо наявність Chart.js
                 if (typeof Chart === 'undefined') {
-                    console.error("Chart.js не завантажено! Програма може працювати некоректно.");
+                    console.error("Chart.js не завантажено!");
                 }
                 
-                // Створюємо екземпляр WarehouseStats із захватом помилок
                 try {
                     window.warehouseStatsInstance = new WarehouseStats();
                     console.log("Програму успішно ініціалізовано");
                 } catch (error) {
                     console.error("Помилка при створенні WarehouseStats:", error);
                     
-                    // Повідомлення для користувача
                     const errorMessage = document.createElement('div');
                     errorMessage.className = 'fixed top-0 left-0 right-0 bg-red-600 text-white p-4 text-center';
                     errorMessage.innerHTML = 'Виникла помилка при запуску програми. Будь ласка, оновіть сторінку.';
                     document.body.appendChild(errorMessage);
                 }
                 
-                // Додаємо обробник для favicon.ico
                 const head = document.querySelector('head');
                 const favicon = document.createElement('link');
                 favicon.rel = 'icon';
