@@ -1,13 +1,16 @@
 // Service Worker for Warehouse Stats PWA
 const CACHE_NAME = 'warehouse-stats-v1';
+const BASE_PATH = '/Robota_Personal';
 const urlsToCache = [
-    '/',
-    '/index.html',
-    '/archive-list.html',
-    '/archive-detail.html',
-    '/theme-switcher.js',
-    'https://cdn.tailwindcss.com',
-    'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css',
+    `${BASE_PATH}/`,
+    `${BASE_PATH}/index.html`,
+    `${BASE_PATH}/archive-list.html`,
+    `${BASE_PATH}/archive-detail.html`,
+    `${BASE_PATH}/theme-switcher.js`,
+    `${BASE_PATH}/icon-192.png`,
+    `${BASE_PATH}/icon-512.png`,
+    'https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css',
+    'https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css',
     'https://cdn.jsdelivr.net/npm/chart.js',
     'https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap'
 ];
