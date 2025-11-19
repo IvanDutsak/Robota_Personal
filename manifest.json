@@ -1,0 +1,31 @@
+{
+    "name": "Warehouse Stats - Статистика Складу",
+    "short_name": "Warehouse Stats",
+    "description": "Аналітика та статистика роботи на складі. Розрахунок заробітку, бонусів та візуалізація даних.",
+    "start_url": "/",
+    "scope": "/",
+    "display": "standalone",
+    "orientation": "portrait-primary",
+    "background_color": "#0f172a",
+    "theme_color": "#10b981",
+    "icons": [
+        {
+            "src": "icon-192.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "any maskable"
+        },
+        {
+            "src": "icon-512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "any maskable"
+        }
+    ],
+    "categories": [
+        "productivity",
+        "business"
+    ],
+    "lang": "uk-UA",
+    "dir": "ltr"
+}
