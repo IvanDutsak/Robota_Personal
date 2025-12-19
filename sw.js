@@ -1,5 +1,5 @@
 // Service Worker for Warehouse Stats PWA
-const CACHE_NAME = 'warehouse-stats-v1';
+const CACHE_NAME = 'warehouse-stats-v2';
 const BASE_PATH = '/Robota_Personal';
 const urlsToCache = [
     `${BASE_PATH}/`,
@@ -17,7 +17,7 @@ const urlsToCache = [
 
 // Install event - cache resources
 self.addEventListener('install', (event) => {
-    console.log('[Service Worker] Installing...');
+    console.log('[Service Worker] Installing new version...');
     event.waitUntil(
         caches.open(CACHE_NAME)
             .then((cache) => {
@@ -28,12 +28,13 @@ self.addEventListener('install', (event) => {
                 console.error('[Service Worker] Cache failed:', error);
             })
     );
+    // Force the waiting service worker to become the active service worker
     self.skipWaiting();
 });
 
 // Activate event - clean up old caches
 self.addEventListener('activate', (event) => {
-    console.log('[Service Worker] Activating...');
+    console.log('[Service Worker] Activating new version...');
     event.waitUntil(
         caches.keys().then((cacheNames) => {
             return Promise.all(
@@ -46,41 +47,40 @@ self.addEventListener('activate', (event) => {
             );
         })
     );
+    // Take control of all clients immediately
     self.clients.claim();
 });
 
-// Fetch event - serve from cache, fallback to network
+// Fetch event - network first, fallback to cache
 self.addEventListener('fetch', (event) => {
     event.respondWith(
-        caches.match(event.request)
+        fetch(event.request)
             .then((response) => {
-                // Cache hit - return response
-                if (response) {
-                    return response;
+                // Check if valid response
+                if (!response || response.status !== 200) {
+                    return caches.match(event.request);
                 }
 
-                // Clone the request
-                const fetchRequest = event.request.clone();
+                // Clone the response
+                const responseToCache = response.clone();
 
-                return fetch(fetchRequest).then((response) => {
-                    // Check if valid response
-                    if (!response || response.status !== 200 || response.type !== 'basic') {
-                        return response;
-                    }
+                caches.open(CACHE_NAME)
+                    .then((cache) => {
+                        cache.put(event.request, responseToCache);
+                    });
 
-                    // Clone the response
-                    const responseToCache = response.clone();
-
-                    caches.open(CACHE_NAME)
-                        .then((cache) => {
-                            cache.put(event.request, responseToCache);
-                        });
-
-                    return response;
-                }).catch((error) => {
-                    console.error('[Service Worker] Fetch failed:', error);
-                    // You can return a custom offline page here if needed
-                });
+                return response;
+            })
+            .catch(() => {
+                // Network failed, try cache
+                return caches.match(event.request);
             })
     );
+});
+
+// Listen for messages to force update
+self.addEventListener('message', (event) => {
+    if (event.data && event.data.type === 'SKIP_WAITING') {
+        self.skipWaiting();
+    }
 });
