@@ -174,62 +174,6 @@
             outline: none;
         }
 
-        /* Tariff Toggle Styles */
-        .tariff-toggle {
-            display: flex;
-            background: var(--glass-bg);
-            border: var(--glass-border);
-            border-radius: 0.75rem;
-            padding: 4px;
-            gap: 4px;
-        }
-
-        .tariff-btn {
-            flex: 1;
-            padding: 0.5rem 1rem;
-            border-radius: 0.5rem;
-            font-weight: 600;
-            font-size: 0.875rem;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            border: none;
-            background: transparent;
-            color: var(--text-secondary);
-        }
-
-        .tariff-btn.active {
-            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
-            color: white;
-            box-shadow: 0 2px 10px rgba(59, 130, 246, 0.4);
-        }
-
-        .tariff-btn:hover:not(.active) {
-            background: rgba(59, 130, 246, 0.1);
-            color: var(--text-primary);
-        }
-
-        :root.light .tariff-btn {
-            color: #64748b;
-        }
-
-        :root.light .tariff-btn.active {
-            color: white;
-        }
-
-        /* Hourly Rate Card */
-        .hourly-rate-card {
-            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(5, 150, 105, 0.1) 100%);
-            border: 1px solid rgba(16, 185, 129, 0.3);
-        }
-
-        .hourly-rate-card:hover {
-            background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(5, 150, 105, 0.15) 100%);
-        }
-
-        :root.light .hourly-rate-card {
-            background: linear-gradient(135deg, rgba(16, 185, 129, 0.08) 0%, rgba(5, 150, 105, 0.08) 100%);
-        }
-
         /* Theme Toggle Button */
         .theme-toggle {
             position: fixed;
@@ -598,61 +542,6 @@
                     Введення даних
                 </h2>
 
-                <!-- Tariff Toggle Section -->
-                <div class="mb-6">
-                    <div class="stat-card rounded-lg sm:rounded-xl p-3 sm:p-4 md:p-5">
-                        <div class="flex items-center mb-3">
-                            <div class="icon-box mr-3 md:mr-4 bg-amber-500/20 text-amber-400">
-                                <i class="fas fa-briefcase text-lg"></i>
-                            </div>
-                            <span class="text-white font-semibold text-base sm:text-lg">Тарифний план</span>
-                        </div>
-                        <div class="tariff-toggle">
-                            <button id="tariff-standard" class="tariff-btn active" data-tariff="standard">
-                                <i class="fas fa-user-check mr-1"></i> Стандарт
-                            </button>
-                            <button id="tariff-first-month" class="tariff-btn" data-tariff="firstMonth">
-                                <i class="fas fa-seedling mr-1"></i> 1-й місяць
-                            </button>
-                        </div>
-                        <div id="tariff-info" class="mt-3 text-center py-2 px-3 rounded-lg bg-white bg-opacity-10">
-                            <span class="text-blue-300 text-sm">Стандартні коефіцієнти</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Hourly Rate Section (visible only for first month) -->
-                <div id="hourly-rate-section" class="mb-6" style="display: none;">
-                    <div class="stat-card rounded-lg sm:rounded-xl p-3 sm:p-4 md:p-5 hourly-rate-card">
-                        <div class="flex items-center mb-3">
-                            <div class="icon-box mr-3 md:mr-4 bg-emerald-500/20 text-emerald-400">
-                                <i class="fas fa-clock text-lg"></i>
-                            </div>
-                            <span class="text-white font-semibold text-base sm:text-lg">Погодинна ставка</span>
-                        </div>
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-                            <div>
-                                <label class="block text-blue-200 text-xs sm:text-sm font-medium mb-1 sm:mb-2">Відпрацьовано годин:</label>
-                                <input type="number" id="hourly-hours-worked"
-                                    class="input-glow text-white rounded-md sm:rounded-lg px-3 py-2 sm:px-4 sm:py-3 w-full text-center text-base sm:text-lg font-bold"
-                                    step="0.5" min="0" value="" placeholder="0" max="744">
-                            </div>
-                            <div>
-                                <label class="block text-blue-200 text-xs sm:text-sm font-medium mb-1 sm:mb-2">Ставка/год:</label>
-                                <div class="result-display text-base px-3 py-2 sm:px-4 sm:py-3 w-full text-center">
-                                    <span class="font-bold text-emerald-400">51.04 грн</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="mt-3 bg-white bg-opacity-10 rounded-md sm:rounded-lg p-2 sm:p-3">
-                            <div class="flex justify-between items-center">
-                                <span class="text-blue-200 text-xs sm:text-sm">Заробіток за години:</span>
-                                <span id="hourly-earnings" class="text-emerald-400 font-bold text-lg">0.00</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
                 <!-- Секція премій -->
                 <div class="mb-6 space-y-4">
                     <div class="stat-card rounded-lg sm:rounded-xl p-3 sm:p-4 md:p-5 bonus-card" id="rating-card">
@@ -721,7 +610,7 @@
                                 <input type="number" id="dc-collected"
                                     class="input-glow text-white rounded-md sm:rounded-lg px-3 py-2 sm:px-4 sm:py-3 w-20 sm:w-24 text-center text-base sm:text-lg font-bold"
                                     step="1" min="0" value="" pattern="[0-9]*" inputmode="numeric" max="9999999">
-                                <span id="multiplier-dc" class="text-blue-300 font-medium multiplier text-sm sm:text-base">× 1.40 =</span>
+                                <span class="text-blue-300 font-medium multiplier text-sm sm:text-base">× 1.40 =</span>
                                 <div
                                     class="result-display text-sm sm:text-base px-3 py-2 sm:px-4 sm:py-3 w-24 sm:w-auto">
                                     <span id="dc-result" class="font-bold number-truncate">0.00</span>
@@ -742,7 +631,7 @@
                                 <input type="number" id="store-collected"
                                     class="input-glow text-white rounded-md sm:rounded-lg px-3 py-2 sm:px-4 sm:py-3 w-20 sm:w-24 text-center text-base sm:text-lg font-bold"
                                     step="1" min="0" value="" pattern="[0-9]*" inputmode="numeric" max="9999999">
-                                <span id="multiplier-store" class="text-blue-300 font-medium multiplier text-sm sm:text-base">× 2.80 =</span>
+                                <span class="text-blue-300 font-medium multiplier text-sm sm:text-base">× 2.80 =</span>
                                 <div
                                     class="result-display text-sm sm:text-base px-3 py-2 sm:px-4 sm:py-3 w-24 sm:w-auto">
                                     <span id="store-result" class="font-bold number-truncate">0.00</span>
@@ -763,7 +652,7 @@
                                 <input type="number" id="dc-moved"
                                     class="input-glow text-white rounded-md sm:rounded-lg px-3 py-2 sm:px-4 sm:py-3 w-20 sm:w-24 text-center text-base sm:text-lg font-bold"
                                     step="1" min="0" value="" pattern="[0-9]*" inputmode="numeric" max="9999999">
-                                <span id="multiplier-moved" class="text-blue-300 font-medium multiplier text-sm sm:text-base">× 3.45 =</span>
+                                <span class="text-blue-300 font-medium multiplier text-sm sm:text-base">× 3.45 =</span>
                                 <div
                                     class="result-display text-sm sm:text-base px-3 py-2 sm:px-4 sm:py-3 w-24 sm:w-auto">
                                     <span id="moved-result" class="font-bold number-truncate">0.00</span>
@@ -784,7 +673,7 @@
                                 <input type="number" id="placed"
                                     class="input-glow text-white rounded-md sm:rounded-lg px-3 py-2 sm:px-4 sm:py-3 w-20 sm:w-24 text-center text-base sm:text-lg font-bold"
                                     step="1" min="0" value="" pattern="[0-9]*" inputmode="numeric" max="9999999">
-                                <span id="multiplier-placed" class="text-blue-300 font-medium multiplier text-sm sm:text-base">× 1.59 =</span>
+                                <span class="text-blue-300 font-medium multiplier text-sm sm:text-base">× 1.59 =</span>
                                 <div
                                     class="result-display text-sm sm:text-base px-3 py-2 sm:px-4 sm:py-3 w-24 sm:w-auto">
                                     <span id="placed-result" class="font-bold number-truncate">0.00</span>
@@ -807,7 +696,7 @@
                                     class="input-glow text-white rounded-md sm:rounded-lg px-3 py-2 sm:px-4 sm:py-3 w-20 sm:w-24 text-center text-base sm:text-lg font-bold"
                                     step="0.1" min="0" value="" pattern="[0-9]*\.?[0-9]*" inputmode="decimal"
                                     max="9999999">
-                                <span id="multiplier-weight" class="text-blue-300 font-medium multiplier text-sm sm:text-base">× 0.14 =</span>
+                                <span class="text-blue-300 font-medium multiplier text-sm sm:text-base">× 0.14 =</span>
                                 <div
                                     class="result-display text-sm sm:text-base px-3 py-2 sm:px-4 sm:py-3 w-24 sm:w-auto">
                                     <span id="weight-result" class="font-bold number-truncate">0.00</span>
@@ -829,7 +718,7 @@
                                 <input type="number" id="packing-order"
                                     class="input-glow text-white rounded-md sm:rounded-lg px-3 py-2 sm:px-4 sm:py-3 w-20 sm:w-24 text-center text-base sm:text-lg font-bold"
                                     step="1" min="0" value="" pattern="[0-9]*" inputmode="numeric" max="9999999">
-                                <span id="multiplier-packing" class="text-blue-300 font-medium multiplier text-sm sm:text-base">× 0.28 =</span>
+                                <span class="text-blue-300 font-medium multiplier text-sm sm:text-base">× 0.28 =</span>
                                 <div
                                     class="result-display text-sm sm:text-base px-3 py-2 sm:px-4 sm:py-3 w-24 sm:w-auto">
                                     <span id="packing-result" class="font-bold number-truncate">0.00</span>
@@ -1241,39 +1130,15 @@
     <script>
         class WarehouseStats {
             constructor() {
-                // Тарифні плани
-                this.tariffPlans = {
-                    standard: {
-                        name: 'Стандарт',
-                        hourlyRate: 0, // Немає погодинної ставки
-                        coefficients: {
-                            dcCollected: 1.40,
-                            storeCollected: 2.80,
-                            dcMoved: 3.45,
-                            placed: 1.59,
-                            weightPlacement: 0.14,
-                            packingOrder: 0.28
-                        }
-                    },
-                    firstMonth: {
-                        name: '1-й місяць',
-                        hourlyRate: 51.04, // Погодинна ставка
-                        coefficients: {
-                            dcCollected: 0.70,
-                            storeCollected: 1.40,
-                            dcMoved: 1.72,
-                            placed: 0.79,
-                            weightPlacement: 0.07,
-                            packingOrder: 0.14
-                        }
-                    }
-                };
-
-                // Поточний тарифний план
-                this.currentTariff = localStorage.getItem('selectedTariff') || 'standard';
-                
                 // ОНОВЛЕНІ КОЕФІЦІЄНТИ з доданими новими
-                this.coefficients = { ...this.tariffPlans[this.currentTariff].coefficients };
+                this.coefficients = {
+                    dcCollected: 1.40,
+                    storeCollected: 2.80,
+                    dcMoved: 3.45,
+                    placed: 1.59,
+                    weightPlacement: 0.14,  // НОВИЙ коефіцієнт
+                    packingOrder: 0.28      // НОВИЙ коефіцієнт
+                };
 
                 // Коефіцієнти бонусів
                 this.bonusCoefficients = {
@@ -1362,104 +1227,8 @@
                     this.importFileInput = document.getElementById('import-file-input');
                     this.importedData = null; // Store imported data temporarily
 
-                    // Тарифні елементи
-                    this.tariffStandardBtn = document.getElementById('tariff-standard');
-                    this.tariffFirstMonthBtn = document.getElementById('tariff-first-month');
-                    this.tariffInfo = document.getElementById('tariff-info');
-                    this.hourlyRateSection = document.getElementById('hourly-rate-section');
-                    this.hourlyHoursWorked = document.getElementById('hourly-hours-worked');
-                    this.hourlyEarnings = document.getElementById('hourly-earnings');
-
-                    // Ініціалізація тарифу при завантаженні
-                    this.initializeTariff();
-
                 } catch (error) {
                     console.error('Помилка в initializeElements:', error);
-                }
-            }
-
-            initializeTariff() {
-                // Встановлення активної кнопки тарифу
-                if (this.currentTariff === 'firstMonth') {
-                    this.tariffStandardBtn?.classList.remove('active');
-                    this.tariffFirstMonthBtn?.classList.add('active');
-                    if (this.hourlyRateSection) this.hourlyRateSection.style.display = 'block';
-                    if (this.tariffInfo) this.tariffInfo.innerHTML = '<span class="text-emerald-400 text-sm"><i class="fas fa-seedling mr-1"></i>Коефіцієнти для 1-го місяця + погодинна ставка</span>';
-                } else {
-                    this.tariffStandardBtn?.classList.add('active');
-                    this.tariffFirstMonthBtn?.classList.remove('active');
-                    if (this.hourlyRateSection) this.hourlyRateSection.style.display = 'none';
-                    if (this.tariffInfo) this.tariffInfo.innerHTML = '<span class="text-blue-300 text-sm">Стандартні коефіцієнти</span>';
-                }
-                this.updateMultiplierDisplay();
-            }
-
-            switchTariff(tariffKey) {
-                if (!this.tariffPlans[tariffKey]) return;
-                
-                this.currentTariff = tariffKey;
-                localStorage.setItem('selectedTariff', tariffKey);
-                
-                // Оновлення коефіцієнтів
-                this.coefficients = { ...this.tariffPlans[tariffKey].coefficients };
-                
-                // Оновлення UI
-                if (tariffKey === 'firstMonth') {
-                    this.tariffStandardBtn?.classList.remove('active');
-                    this.tariffFirstMonthBtn?.classList.add('active');
-                    if (this.hourlyRateSection) this.hourlyRateSection.style.display = 'block';
-                    if (this.tariffInfo) this.tariffInfo.innerHTML = '<span class="text-emerald-400 text-sm"><i class="fas fa-seedling mr-1"></i>Коефіцієнти для 1-го місяця + погодинна ставка</span>';
-                } else {
-                    this.tariffStandardBtn?.classList.add('active');
-                    this.tariffFirstMonthBtn?.classList.remove('active');
-                    if (this.hourlyRateSection) this.hourlyRateSection.style.display = 'none';
-                    if (this.tariffInfo) this.tariffInfo.innerHTML = '<span class="text-blue-300 text-sm">Стандартні коефіцієнти</span>';
-                }
-                
-                // Оновлення відображення коефіцієнтів
-                this.updateMultiplierDisplay();
-                
-                // Перерахунок
-                this.updateCalculations();
-                
-                // Показати повідомлення
-                this.showSuccessMessage(`Тариф змінено на: ${this.tariffPlans[tariffKey].name}`);
-            }
-
-            updateMultiplierDisplay() {
-                const multipliers = {
-                    'multiplier-dc': this.coefficients.dcCollected,
-                    'multiplier-store': this.coefficients.storeCollected,
-                    'multiplier-moved': this.coefficients.dcMoved,
-                    'multiplier-placed': this.coefficients.placed,
-                    'multiplier-weight': this.coefficients.weightPlacement,
-                    'multiplier-packing': this.coefficients.packingOrder
-                };
-                
-                Object.entries(multipliers).forEach(([id, value]) => {
-                    const element = document.getElementById(id);
-                    if (element) {
-                        element.textContent = `× ${value.toFixed(2)} =`;
-                        // Анімація зміни
-                        element.style.transform = 'scale(1.1)';
-                        element.style.color = '#10b981';
-                        setTimeout(() => {
-                            element.style.transform = '';
-                            element.style.color = '';
-                        }, 300);
-                    }
-                });
-            }
-
-            updateHourlyEarnings() {
-                if (this.currentTariff !== 'firstMonth') return;
-                
-                const hours = parseFloat(this.hourlyHoursWorked?.value) || 0;
-                const hourlyRate = this.tariffPlans.firstMonth.hourlyRate;
-                const earnings = hours * hourlyRate;
-                
-                if (this.hourlyEarnings) {
-                    this.animateNumberChange(this.hourlyEarnings, earnings);
                 }
             }
 
@@ -1520,16 +1289,6 @@
                         this.animateResultUpdate(this.weightPlacementInput);
                     });
                 }
-
-                // Обробники для тарифних кнопок
-                safeAddEventListener(this.tariffStandardBtn, 'click', () => this.switchTariff('standard'));
-                safeAddEventListener(this.tariffFirstMonthBtn, 'click', () => this.switchTariff('firstMonth'));
-
-                // Обробник для погодинного розрахунку
-                safeAddEventListener(this.hourlyHoursWorked, 'input', () => {
-                    this.updateHourlyEarnings();
-                    this.updateCalculations();
-                });
 
                 // Обробники для слайдерів бонусів
                 safeAddEventListener(this.averageRating, 'input', () => {
@@ -1734,19 +1493,7 @@
                 this.animateNumberChange(this.weightResult, weightResult); // НОВИЙ
                 this.animateNumberChange(this.packingResult, packingResult); // НОВИЙ
 
-                const articlesTotal = dcResult + storeResult + movedResult + placedResult + weightResult + packingResult; // Загальний заробіток за артикули
-                
-                // Додаємо погодинний заробіток для 1-го місяця
-                let hourlyEarnings = 0;
-                if (this.currentTariff === 'firstMonth' && this.hourlyHoursWorked) {
-                    const hours = parseFloat(this.hourlyHoursWorked.value) || 0;
-                    hourlyEarnings = hours * this.tariffPlans.firstMonth.hourlyRate;
-                    if (this.hourlyEarnings) {
-                        this.animateNumberChange(this.hourlyEarnings, hourlyEarnings);
-                    }
-                }
-                
-                const total = articlesTotal + hourlyEarnings;
+                const total = dcResult + storeResult + movedResult + placedResult + weightResult + packingResult; // ОНОВЛЕНО
                 this.animateNumberChange(this.totalResult, total);
 
                 // Розрахунок з бонусами
